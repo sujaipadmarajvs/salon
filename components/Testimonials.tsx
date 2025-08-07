@@ -10,6 +10,16 @@ const Testimonials = () => {
   const sectionRef = useRef<HTMLElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
+  const handleColumnMouseEnter = (event: React.MouseEvent<HTMLDivElement>) => {
+    const columnElement = event.currentTarget as HTMLElement;
+    columnElement.style.animationPlayState = 'paused';
+  };
+
+  const handleColumnMouseLeave = (event: React.MouseEvent<HTMLDivElement>) => {
+    const columnElement = event.currentTarget as HTMLElement;
+    columnElement.style.animationPlayState = 'running';
+  };
+
   // Extended testimonials with more realistic data
   const reviews = [
     {
@@ -141,22 +151,32 @@ const Testimonials = () => {
     rating: number;
   }) => {
     return (
-      <div className="bg-gray-900/50 backdrop-blur-sm border border-gray-800 rounded-xl p-6 hover:bg-gray-900/70 transition-all duration-300 hover:border-babu-accent-2/30">
-        <div className="flex items-start gap-4 mb-4">
-          <img 
-            className="rounded-full w-12 h-12 object-cover border-2 border-babu-accent-2/20" 
-            alt={name} 
-            src={img} 
-          />
-          <div className="flex-1">
-            <h4 className="text-white font-semibold text-sm">{name}</h4>
-            <p className="text-gray-400 text-xs">{username}</p>
+      <div className="relative bg-gray-900/50 backdrop-blur-sm border border-gray-800 rounded-xl p-6 hover:bg-gray-900/70 transition-all duration-300 hover:border-babu-accent-2/30 group">
+        {/* Luxurious golden and black glow effect on hover */}
+        <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-yellow-100/40 via-yellow-300/50 to-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+        <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-yellow-200/35 via-yellow-400/45 to-black/35 opacity-0 group-hover:opacity-100 transition-opacity duration-400"></div>
+        <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-yellow-300/30 via-yellow-500/40 to-black/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+        <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-yellow-400/25 via-yellow-600/35 to-black/25 opacity-0 group-hover:opacity-100 transition-opacity duration-200"></div>
+        <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-yellow-500/20 via-yellow-700/30 to-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-100"></div>
+        
+        {/* Content */}
+        <div className="relative z-10">
+          <div className="flex items-start gap-4 mb-4">
+            <img 
+              className="rounded-full w-12 h-12 object-cover border-2 border-babu-accent-2/20" 
+              alt={name} 
+              src={img} 
+            />
+            <div className="flex-1">
+              <h4 className="text-white font-semibold text-sm">{name}</h4>
+              <p className="text-gray-400 text-xs">{username}</p>
+            </div>
           </div>
+          <div className="flex mb-3">
+            {renderStars(rating)}
+          </div>
+          <p className="text-gray-300 text-sm leading-relaxed">{body}</p>
         </div>
-        <div className="flex mb-3">
-          {renderStars(rating)}
-        </div>
-        <p className="text-gray-300 text-sm leading-relaxed">{body}</p>
       </div>
     );
   };
@@ -209,6 +229,8 @@ const Testimonials = () => {
                   animationIterationCount: 'infinite',
                   animationTimingFunction: 'linear'
                 }}
+                onMouseEnter={handleColumnMouseEnter}
+                onMouseLeave={handleColumnMouseLeave}
               >
                 {column.map((review, index) => (
                   <ReviewCard key={`${colIndex}-${index}`} {...review} />
