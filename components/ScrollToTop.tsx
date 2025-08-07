@@ -1,0 +1,45 @@
+'use client';
+
+import { useState, useEffect } from 'react';
+import { ChevronUp } from 'lucide-react';
+
+const ScrollToTop = () => {
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollPosition = window.scrollY;
+      const documentHeight = document.documentElement.scrollHeight;
+      const windowHeight = window.innerHeight;
+      const halfPage = (documentHeight - windowHeight) / 2;
+      
+      setIsVisible(scrollPosition > halfPage);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+  };
+
+  if (!isVisible) return null;
+
+  return (
+    <div className="fixed bottom-6 right-6 z-50">
+      <button
+        onClick={scrollToTop}
+        className="bg-gradient-to-r from-yellow-400 via-yellow-500 to-yellow-600 text-white p-4 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110"
+        aria-label="Scroll to top"
+      >
+        <ChevronUp className="w-6 h-6" />
+      </button>
+    </div>
+  );
+};
+
+export default ScrollToTop;
