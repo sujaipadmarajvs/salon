@@ -31,11 +31,11 @@ const ScrollToTop = () => {
 
   return (
     <div className="fixed bottom-6 right-6 z-50">
-      <button
-        onClick={scrollToTop}
-        className="bg-gradient-to-r from-yellow-400 via-yellow-500 to-yellow-600 text-white p-4 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110"
-        aria-label="Scroll to top"
-      >
+                   <button
+               onClick={scrollToTop}
+               className="bg-gradient-to-r from-[#77530a] via-[#ffd277] to-[#77530a] text-white p-4 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110"
+               aria-label="Scroll to top"
+             >
         <ChevronUp className="w-6 h-6" />
       </button>
     </div>

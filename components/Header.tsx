@@ -99,8 +99,8 @@ const Header = () => {
         }`}
         style={{ top: isScrolled ? '0' : showPromoBanner ? '40px' : '0' }}
       >
-        <div className="w-full px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-start items-center py-4">
+        <div className="w-full px-0">
+          <div className="flex justify-start items-center py-4 pl-4">
             {/* Logo */}
             <Link href="/" className="flex items-center">
               <div className="logo-glossy hover-zoom">

@@ -140,7 +140,7 @@ const Testimonials = () => {
   };
 
   return (
-    <section ref={sectionRef} className="py-20 bg-babu-primary text-white">
+    <section ref={sectionRef} className="py-20 bg-black text-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-16 fade-in-section">

@@ -9,6 +9,7 @@ const Gallery = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalImageIndex, setModalImageIndex] = useState(0);
+  const [isAutoPlaying, setIsAutoPlaying] = useState(false);
   const sectionRef = useRef<HTMLElement>(null);
 
   // Sample gallery images (replace with actual salon images)
@@ -27,10 +28,15 @@ const Gallery = () => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
             entry.target.classList.add('is-visible');
+            // Start auto-slideshow when section is visible
+            setIsAutoPlaying(true);
+          } else {
+            // Stop auto-slideshow when section is not visible
+            setIsAutoPlaying(false);
           }
         });
       },
-      { threshold: 0.1 }
+      { threshold: 0.3 }
     );
 
     const elements = sectionRef.current?.querySelectorAll('.fade-in-section');
@@ -38,6 +44,23 @@ const Gallery = () => {
 
     return () => observer.disconnect();
   }, []);
+
+  // Auto-slideshow effect
+  useEffect(() => {
+    let interval: NodeJS.Timeout;
+    
+    if (isAutoPlaying) {
+      interval = setInterval(() => {
+        setCurrentIndex((prev) => (prev + 1) % galleryImages.length);
+      }, 3000); // Change slide every 3 seconds
+    }
+
+    return () => {
+      if (interval) {
+        clearInterval(interval);
+      }
+    };
+  }, [isAutoPlaying, galleryImages.length]);
 
   const nextSlide = () => {
     setCurrentIndex((prev) => (prev + 1) % galleryImages.length);
@@ -65,15 +88,15 @@ const Gallery = () => {
   };
 
   return (
-    <section ref={sectionRef} className="py-20 bg-gray-50">
+    <section ref={sectionRef} className="py-20 bg-black">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-16 fade-in-section">
-          <h2 className="text-4xl lg:text-5xl font-serif font-bold text-babu-primary mb-4">
+          <h2 className="text-4xl lg:text-5xl font-serif font-bold text-white mb-4">
             Our Gallery
           </h2>
-          <div className="w-20 h-1 bg-babu-accent-2 mx-auto mb-6"></div>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+          <div className="w-20 h-1 bg-gradient-to-r from-[#77530a] to-[#ffd277] mx-auto mb-6"></div>
+          <p className="text-lg text-white/80 max-w-2xl mx-auto">
             Take a glimpse into our luxurious salon environment and see the beautiful transformations we create every day.
           </p>
         </div>
