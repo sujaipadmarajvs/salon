@@ -1,8 +1,8 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { motion, useTransform, useScroll } from "framer-motion";
+import { useRef } from "react";
 import Image from 'next/image';
-import { ChevronLeft, ChevronRight, X } from 'lucide-react';
 import { siteConfig } from '@/config/site';
 
 const Gallery = () => {
@@ -88,7 +88,7 @@ const Gallery = () => {
   };
 
   return (
-    <section ref={sectionRef} className="py-20 bg-black">
+    <section className="py-20 bg-black">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-16 fade-in-section">
@@ -206,3 +206,49 @@ const Gallery = () => {
 };
 
 export default Gallery;
+
+// Gallery data with salon-specific content
+const galleryCards = [
+  {
+    id: 1,
+    url: 'https://images.pexels.com/photos/3993449/pexels-photo-3993449.jpeg?auto=compress&cs=tinysrgb&w=800',
+    title: "Hair Styling",
+    description: "Professional hair styling and cutting services"
+  },
+  {
+    id: 2,
+    url: 'https://images.pexels.com/photos/3993456/pexels-photo-3993456.jpeg?auto=compress&cs=tinysrgb&w=800',
+    title: "Hair Coloring",
+    description: "Expert hair coloring and highlighting techniques"
+  },
+  {
+    id: 3,
+    url: 'https://images.pexels.com/photos/3764013/pexels-photo-3764013.jpeg?auto=compress&cs=tinysrgb&w=800',
+    title: "Hair Treatments",
+    description: "Nourishing hair treatments and deep conditioning"
+  },
+  {
+    id: 4,
+    url: 'https://images.pexels.com/photos/3993465/pexels-photo-3993465.jpeg?auto=compress&cs=tinysrgb&w=800',
+    title: "Bridal Services",
+    description: "Special bridal hair and makeup packages"
+  },
+  {
+    id: 5,
+    url: 'https://images.pexels.com/photos/3764011/pexels-photo-3764011.jpeg?auto=compress&cs=tinysrgb&w=800',
+    title: "Hair Extensions",
+    description: "Professional hair extension services"
+  },
+  {
+    id: 6,
+    url: 'https://images.pexels.com/photos/3993463/pexels-photo-3993463.jpeg?auto=compress&cs=tinysrgb&w=800',
+    title: "Hair Care",
+    description: "Complete hair care and maintenance services"
+  },
+  {
+    id: 7,
+    url: 'https://images.pexels.com/photos/3993449/pexels-photo-3993449.jpeg?auto=compress&cs=tinysrgb&w=800',
+    title: "Styling Consultation",
+    description: "Personalized styling consultations and advice"
+  },
+];
