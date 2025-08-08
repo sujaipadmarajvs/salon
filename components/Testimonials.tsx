@@ -131,13 +131,13 @@ const Testimonials = () => {
       <Star
         key={i}
         className={`w-4 h-4 ${
-          i < rating ? 'text-babu-accent-2 fill-current' : 'text-gray-400'
+          i < rating ? 'text-yellow-400 fill-current' : 'text-gray-400'
         }`}
       />
     ));
   };
 
-  const ReviewCard = ({
+  const TestimonialCard = ({
     img,
     name,
     username,
@@ -151,31 +151,45 @@ const Testimonials = () => {
     rating: number;
   }) => {
     return (
-      <div className="relative bg-gray-900/50 backdrop-blur-sm border border-gray-800 rounded-xl p-6 hover:bg-gray-900/70 transition-all duration-300 hover:border-babu-accent-2/30 group">
-        {/* Luxurious golden and black glow effect on hover */}
-        <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-yellow-100/40 via-yellow-300/50 to-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-        <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-yellow-200/35 via-yellow-400/45 to-black/35 opacity-0 group-hover:opacity-100 transition-opacity duration-400"></div>
-        <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-yellow-300/30 via-yellow-500/40 to-black/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-        <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-yellow-400/25 via-yellow-600/35 to-black/25 opacity-0 group-hover:opacity-100 transition-opacity duration-200"></div>
-        <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-yellow-500/20 via-yellow-700/30 to-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-100"></div>
+              <div className="relative p-6 rounded-2xl border transition-all duration-700 ease-out hover:scale-105 hover:shadow-2xl hover:border-amber-400/70 bg-gray-900/50 backdrop-blur-sm border-gray-700/50 group">
+        {/* Glow effect overlay */}
+        <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-amber-400/30 to-yellow-300/30 opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-xl"></div>
+        <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-yellow-400/20 to-amber-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-400 blur-lg"></div>
         
-        {/* Content */}
+        {/* Content container */}
         <div className="relative z-10">
-          <div className="flex items-start gap-4 mb-4">
-            <img 
-              className="rounded-full w-12 h-12 object-cover border-2 border-babu-accent-2/20" 
-              alt={name} 
-              src={img} 
-            />
-            <div className="flex-1">
-              <h4 className="text-white font-semibold text-sm">{name}</h4>
-              <p className="text-gray-400 text-xs">{username}</p>
+          {/* Quote text */}
+          <p className="text-gray-300 leading-relaxed text-base mb-4">
+            "{body}"
+          </p>
+          
+          {/* Author section */}
+          <div className="flex items-center gap-3">
+            <div className="relative">
+              <img 
+                src={img} 
+                alt={name}
+                className="w-12 h-12 rounded-full object-cover ring-2 ring-amber-400/30 group-hover:ring-amber-400/70 transition-all duration-300"
+              />
+              <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-amber-400/30 to-yellow-300/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+            </div>
+            <div>
+              <h4 className="font-semibold text-white">{name}</h4>
+              <p className="text-sm text-gray-400">{username}</p>
+              <div className="flex mt-1">
+                {renderStars(rating)}
+              </div>
             </div>
           </div>
-          <div className="flex mb-3">
-            {renderStars(rating)}
-          </div>
-          <p className="text-gray-300 text-sm leading-relaxed">{body}</p>
+        </div>
+        
+        {/* Decorative element */}
+        <div className="absolute top-4 right-4 w-8 h-8 rounded-full bg-amber-400/20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300">
+          <div className="w-3 h-3 rounded-full bg-amber-400 animate-pulse"></div>
+        </div>
+        {/* Additional golden accent */}
+        <div className="absolute bottom-4 left-4 w-6 h-6 rounded-full bg-yellow-400/20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-500">
+          <div className="w-2 h-2 rounded-full bg-yellow-400"></div>
         </div>
       </div>
     );
@@ -200,7 +214,7 @@ const Testimonials = () => {
           <h2 className="text-4xl lg:text-5xl font-serif font-bold mb-4">
             Loved by our clients
           </h2>
-          <div className="w-20 h-1 bg-babu-accent-2 mx-auto mb-6"></div>
+          <div className="w-20 h-1 bg-gradient-to-r from-amber-400 to-yellow-400 mx-auto mb-6"></div>
           <p className="text-lg text-gray-400 max-w-2xl mx-auto">
             Don't just take our word for it. Here's what our satisfied clients have to say about their experience at BA-BU Family Salon.
           </p>
@@ -233,11 +247,11 @@ const Testimonials = () => {
                 onMouseLeave={handleColumnMouseLeave}
               >
                 {column.map((review, index) => (
-                  <ReviewCard key={`${colIndex}-${index}`} {...review} />
+                  <TestimonialCard key={`${colIndex}-${index}`} {...review} />
                 ))}
                 {/* Duplicate cards for seamless loop */}
                 {column.map((review, index) => (
-                  <ReviewCard key={`${colIndex}-${index}-duplicate`} {...review} />
+                  <TestimonialCard key={`${colIndex}-${index}-duplicate`} {...review} />
                 ))}
               </div>
             ))}
@@ -246,7 +260,7 @@ const Testimonials = () => {
 
         {/* Google Reviews Badge */}
         <div className="text-center mt-12 fade-in-section">
-          <div className="inline-flex items-center space-x-2 bg-babu-accent-2/20 border border-babu-accent-2/30 text-white px-6 py-3 rounded-full">
+          <div className="inline-flex items-center space-x-2 bg-gradient-to-r from-amber-400/30 to-yellow-400/20 border border-amber-400/40 text-white px-6 py-3 rounded-full">
             <div className="flex">
               {renderStars(5)}
             </div>
