@@ -10,14 +10,20 @@ const config: Config = {
     ],
     theme: {
         extend: {
+            backgroundImage: {
+                'primary-gradient': 'linear-gradient(to right, #77530a, #ffd277)'
+            },
             fontFamily: {
                 sans: ["var(--font-francy)", "sans-serif"],
-                serif: ["var(--font-sofila)", "serif"],
+                serif: ["var(--font-gunterz)", "serif"],
+                gunteerz: ["var(--font-gunterz)", "sans-serif"],
             },
             colors: {
                 primary: "#000000",
-                secondary: "#C2AE10",
+                secondary: "#FFD700",
                 ternary: "#2E2E2E",
+                accent1: "#A56238",
+                accent2: "#C48E5C",
                 background: "hsl(var(--background))",
                 foreground: "hsl(var(--foreground))",
                 card: {

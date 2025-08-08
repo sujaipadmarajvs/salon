@@ -3,9 +3,96 @@
 @tailwind utilities;
 
 :root {
-  --color-primary: #000000;
-  --color-secondary: #FFD700;
+  --color-primary: #000000;    /* Black - Primary */
+  --color-secondary: #FFD700;  /* Gold - Secondary */
   --color-ternary: #2E2E2E;
+  --color-accent-1: #A56238;   /* Medium Brown - Accent */
+  --color-accent-2: #C48E5C;   /* Light Brown/Gold - Highlight */
+
+  /* Custom font variables for Tailwind mapping */
+  --font-francy: "Francy";
+  --font-gunterz: "Gunterz";
+
+  /* Primary brand gradient (gold) */
+  --primary-gradient: linear-gradient(to right, #77530a, #ffd277);
+}
+
+/* Custom Fonts */
+@font-face {
+  font-family: "Francy";
+  src: url("/fonts/francy/Francy.woff2") format("woff2"),
+       url("/fonts/francy/Francy.woff") format("woff"),
+       url("/fonts/francy/Francy.ttf") format("truetype"),
+       url("/fonts/francy/Francy.otf") format("opentype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+
+/* Gunterz Font Family */
+@font-face {
+  font-family: "Gunterz";
+  src: url("/fonts/guntrez/Gunterz-Regular.otf") format("opentype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Gunterz";
+  src: url("/fonts/guntrez/Gunterz-Italic.otf") format("opentype");
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Gunterz";
+  src: url("/fonts/guntrez/Gunterz-Medium.otf") format("opentype");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Gunterz";
+  src: url("/fonts/guntrez/Gunterz-MediumItalic.otf") format("opentype");
+  font-weight: 500;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Gunterz";
+  src: url("/fonts/guntrez/Gunterz-Bold.otf") format("opentype");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Gunterz";
+  src: url("/fonts/guntrez/Gunterz-BoldItalic.otf") format("opentype");
+  font-weight: 700;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Gunterz";
+  src: url("/fonts/guntrez/Gunterz-Black.otf") format("opentype");
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Gunterz";
+  src: url("/fonts/guntrez/Gunterz-BlackItalic.otf") format("opentype");
+  font-weight: 900;
+  font-style: italic;
+  font-display: swap;
 }
 
 @layer base {
@@ -17,7 +104,7 @@
   }
 
   h1, h2, h3, h4, h5, h6 {
-    font-weight: 900;
+    /* font-weight: 900;   */
     letter-spacing: 4px;
   }
 
@@ -52,6 +139,28 @@
 .border-gold {
   border-color: var(--color-secondary);
 }
+
+  /* Hero banner gradient utility */
+  .bg-hero-gradient {
+    background: linear-gradient(135deg, rgba(5, 24, 34, 0.8) 0%, rgba(165, 98, 56, 0.6) 100%);
+  }
+
+  /* Primary gradient background */
+  .bg-primary-gradient {
+    background: var(--primary-gradient);
+  }
+
+  /* Global gradient button style (spec) */
+  .btn-gradient {
+    background: linear-gradient(to right,#77530a,#ffd277,#77530a,#77530a,#ffd277,#77530a);
+    background-size: 250%;
+    background-position: left;
+    color: #ffd277;
+    position: relative;
+    transition: background-position 1s ease, transform 0.15s ease;
+  }
+  .btn-gradient:hover { background-position: right; }
+  .btn-gradient:active { transform: scale(0.97); }
 
 /* Custom Scrollbar */
 ::-webkit-scrollbar {

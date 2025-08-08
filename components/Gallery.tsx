@@ -1,203 +1,159 @@
-'use client';
+"use client";
 
-import { motion, useTransform, useScroll } from "framer-motion";
-import { useRef } from "react";
-import Image from 'next/image';
-import { siteConfig } from '@/config/site';
+import { useState, useLayoutEffect, useRef } from "react";
+import Image from "next/image";
+import { X } from "lucide-react";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+gsap.registerPlugin(ScrollTrigger);
+
+const galleryImages = [
+  "https://images.pexels.com/photos/3993449/pexels-photo-3993449.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+  "https://images.pexels.com/photos/3993456/pexels-photo-3993456.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+  "https://images.pexels.com/photos/3764013/pexels-photo-3764013.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+  "https://images.pexels.com/photos/3993465/pexels-photo-3993465.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+  "https://images.pexels.com/photos/3764011/pexels-photo-3764011.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+  "https://images.pexels.com/photos/3993463/pexels-photo-3993463.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+  "https://images.pexels.com/photos/1813272/pexels-photo-1813272.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+  "https://images.pexels.com/photos/2061820/pexels-photo-2061820.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+];
+
+const gridSizes = [
+  'col-span-2 row-span-2',
+  'col-span-1 row-span-1',
+  'col-span-1 row-span-2',
+  'col-span-2 row-span-1',
+  'col-span-1 row-span-1',
+  'col-span-2 row-span-2',
+  'col-span-1 row-span-1',
+  'col-span-2 row-span-1',
+];
 
 const Gallery = () => {
-  const [currentIndex, setCurrentIndex] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [modalImageIndex, setModalImageIndex] = useState(0);
-  const [isAutoPlaying, setIsAutoPlaying] = useState(false);
-  const sectionRef = useRef<HTMLElement>(null);
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
-  // Sample gallery images (replace with actual salon images)
-  const galleryImages = [
-    'https://images.pexels.com/photos/3993449/pexels-photo-3993449.jpeg?auto=compress&cs=tinysrgb&w=800',
-    'https://images.pexels.com/photos/3993456/pexels-photo-3993456.jpeg?auto=compress&cs=tinysrgb&w=800',
-    'https://images.pexels.com/photos/3764013/pexels-photo-3764013.jpeg?auto=compress&cs=tinysrgb&w=800',
-    'https://images.pexels.com/photos/3993465/pexels-photo-3993465.jpeg?auto=compress&cs=tinysrgb&w=800',
-    'https://images.pexels.com/photos/3764011/pexels-photo-3764011.jpeg?auto=compress&cs=tinysrgb&w=800',
-    'https://images.pexels.com/photos/3993463/pexels-photo-3993463.jpeg?auto=compress&cs=tinysrgb&w=800',
-  ];
+  const component = useRef<HTMLElement>(null);
+  const modalRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('is-visible');
-            // Start auto-slideshow when section is visible
-            setIsAutoPlaying(true);
-          } else {
-            // Stop auto-slideshow when section is not visible
-            setIsAutoPlaying(false);
-          }
+  useLayoutEffect(() => {
+    const ctx = gsap.context(() => {
+      const images = gsap.utils.toArray(".gallery-image-item");
+      images.forEach((image: any) => {
+        gsap.from(image, {
+          opacity: 0,
+          scale: 0.9,
+          y: 50,
+          duration: 0.8,
+          ease: 'power3.out',
+          scrollTrigger: {
+            trigger: image,
+            start: 'top 90%',
+            toggleActions: 'play none none none',
+          },
         });
-      },
-      { threshold: 0.3 }
-    );
-
-    const elements = sectionRef.current?.querySelectorAll('.fade-in-section');
-    elements?.forEach((el) => observer.observe(el));
-
-    return () => observer.disconnect();
+      });
+    }, component);
+    return () => ctx.revert();
   }, []);
 
-  // Auto-slideshow effect
-  useEffect(() => {
-    let interval: NodeJS.Timeout;
-
-    if (isAutoPlaying) {
-      interval = setInterval(() => {
-        setCurrentIndex((prev) => (prev + 1) % galleryImages.length);
-      }, 3000); // Change slide every 3 seconds
-    }
-
-    return () => {
-      if (interval) {
-        clearInterval(interval);
-      }
-    };
-  }, [isAutoPlaying, galleryImages.length]);
-
-  const nextSlide = () => {
-    setCurrentIndex((prev) => (prev + 1) % galleryImages.length);
-  };
-
-  const prevSlide = () => {
-    setCurrentIndex((prev) => (prev - 1 + galleryImages.length) % galleryImages.length);
-  };
-
-  const openModal = (index: number) => {
-    setModalImageIndex(index);
+  const openModal = (image: string) => {
+    setSelectedImage(image);
     setIsModalOpen(true);
+    gsap.fromTo(
+      modalRef.current,
+      { opacity: 0, scale: 0.9 },
+      { opacity: 1, scale: 1, duration: 0.3, ease: "power2.out" }
+    );
   };
 
   const closeModal = () => {
-    setIsModalOpen(false);
+    gsap.to(modalRef.current, {
+      opacity: 0,
+      scale: 0.9,
+      duration: 0.3,
+      ease: "power2.in",
+      onComplete: () => {
+        setIsModalOpen(false);
+        setSelectedImage(null);
+      },
+    });
   };
 
-  const nextModalImage = () => {
-    setModalImageIndex((prev) => (prev + 1) % galleryImages.length);
+  const handleHoverEnter = (e: React.MouseEvent<HTMLDivElement>) => {
+    gsap.to(e.currentTarget, { scale: 1.05, duration: 0.3, ease: "power2.out" });
   };
 
-  const prevModalImage = () => {
-    setModalImageIndex((prev) => (prev - 1 + galleryImages.length) % galleryImages.length);
+  const handleHoverLeave = (e: React.MouseEvent<HTMLDivElement>) => {
+    gsap.to(e.currentTarget, { scale: 1, duration: 0.3, ease: "power2.in" });
   };
 
   return (
-    <section className="py-20 bg-black">
+    <section id="gallery-section" ref={component} className="py-20 bg-black">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Header */}
-        <div className="text-center mb-16 fade-in-section">
+        <div id="gallery-header" className="text-center mb-16">
           <h2 className="text-4xl lg:text-6xl font-sans font-extrabold text-white mb-4">
             Our Gallery
           </h2>
-          <div className="w-20 h-1 bg-gradient-to-r from-[#77530a] to-[#ffd277] mx-auto mb-6"></div>
+          <div className="w-20 h-1 bg-gradient-to-r from-secondary to-yellow-300 mx-auto mb-6"></div>
           <p className="text-lg text-white/80 max-w-2xl mx-auto tracking-wider">
-            Take a glimpse into our luxurious salon environment and see the beautiful transformations we create every day.
+            A glimpse into our world of style, luxury, and transformation.
           </p>
         </div>
 
-        {/* Main Slider */}
-        <div className="relative mb-12 fade-in-section">
-          <div className="relative h-96 lg:h-[500px] rounded-xl overflow-hidden shadow-2xl">
-            <Image
-              src={galleryImages[currentIndex]}
-              alt={`Gallery image ${currentIndex + 1}`}
-              fill
-              className="object-cover transition-all duration-500"
-            />
-
-            {/* Navigation Buttons */}
-            <button
-              onClick={prevSlide}
-              className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white/80 hover:bg-white text-babu-primary p-3 rounded-full shadow-lg transition-all duration-300 hover:scale-110"
-            >
-              <ChevronLeft className="w-6 h-6" />
-            </button>
-            <button
-              onClick={nextSlide}
-              className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white/80 hover:bg-white text-babu-primary p-3 rounded-full shadow-lg transition-all duration-300 hover:scale-110"
-            >
-              <ChevronRight className="w-6 h-6" />
-            </button>
-
-            {/* Slide Indicators */}
-            <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2">
-              {galleryImages.map((_, index) => (
-                <button
-                  key={index}
-                  onClick={() => setCurrentIndex(index)}
-                  className={`w-3 h-3 rounded-full transition-all duration-300 ${
-                    index === currentIndex ? 'bg-babu-accent-2' : 'bg-white/50'
-                  }`}
-                />
-              ))}
-            </div>
-          </div>
-        </div>
-
-        {/* Thumbnail Grid */}
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 fade-in-section">
+        <div
+          id="gallery-grid"
+          className="grid grid-cols-2 md:grid-cols-4 auto-rows-[150px] gap-4"
+        >
           {galleryImages.map((image, index) => (
             <div
-              key={index}
-              className="relative h-24 lg:h-32 rounded-lg overflow-hidden cursor-pointer group shadow-md hover:shadow-xl transition-all duration-300"
-              onClick={() => openModal(index)}
+              key={image}
+              id={`gallery-item-${index}`}
+              className={`${gridSizes[index % gridSizes.length]} gallery-image-item relative rounded-lg overflow-hidden cursor-pointer group`}
+              onMouseEnter={handleHoverEnter}
+              onMouseLeave={handleHoverLeave}
+              onClick={() => openModal(image)}
             >
               <Image
                 src={image}
-                alt={`Gallery thumbnail ${index + 1}`}
+                alt={`Gallery image ${index + 1}`}
                 fill
-                className="object-cover group-hover:scale-110 transition-transform duration-300"
+                sizes="(max-width: 768px) 50vw, (max-width: 1200px) 25vw, 20vw"
+                className="object-cover"
+                priority={index < 4}
               />
-              <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-all duration-300"></div>
+              <div className="absolute inset-0 bg-black/20 group-hover:bg-black/0 transition-colors duration-300"></div>
             </div>
           ))}
         </div>
       </div>
 
-      {/* Modal */}
-      {isModalOpen && (
-        <div className="fixed inset-0 bg-black/90 z-50 flex items-center justify-center p-4">
-          <div className="relative max-w-4xl max-h-full">
+      {isModalOpen && selectedImage && (
+        <div
+          id="gallery-modal"
+          ref={modalRef}
+          className="fixed inset-0 bg-black/90 z-50 flex items-center justify-center p-4"
+          onClick={closeModal}
+        >
+          <div
+            className="relative"
+            onClick={(e) => e.stopPropagation()}
+          >
             <Image
-              src={galleryImages[modalImageIndex]}
-              alt={`Gallery image ${modalImageIndex + 1}`}
-              width={800}
-              height={600}
-              className="max-w-full max-h-full object-contain rounded-lg"
+              src={selectedImage}
+              alt="Enlarged gallery view"
+              width={1200}
+              height={800}
+              className="max-w-[90vw] max-h-[90vh] object-contain rounded-lg"
             />
-
-            {/* Close Button */}
             <button
+              id="gallery-modal-close-button"
               onClick={closeModal}
-              className="absolute top-4 right-4 bg-white/20 hover:bg-white/30 text-white p-2 rounded-full transition-colors"
+              className="absolute -top-4 -right-4 bg-white/20 hover:bg-white/30 text-white p-2 rounded-full transition-colors"
             >
               <X className="w-6 h-6" />
             </button>
-
-            {/* Navigation */}
-            <button
-              onClick={prevModalImage}
-              className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white/20 hover:bg-white/30 text-white p-3 rounded-full transition-colors"
-            >
-              <ChevronLeft className="w-6 h-6" />
-            </button>
-            <button
-              onClick={nextModalImage}
-              className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white/20 hover:bg-white/30 text-white p-3 rounded-full transition-colors"
-            >
-              <ChevronRight className="w-6 h-6" />
-            </button>
-
-            {/* Image Counter */}
-            <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 bg-black/50 text-white px-4 py-2 rounded-full">
-              {modalImageIndex + 1} / {galleryImages.length}
-            </div>
           </div>
         </div>
       )}
@@ -206,49 +162,3 @@ const Gallery = () => {
 };
 
 export default Gallery;
-
-// Gallery data with salon-specific content
-const galleryCards = [
-  {
-    id: 1,
-    url: 'https://images.pexels.com/photos/3993449/pexels-photo-3993449.jpeg?auto=compress&cs=tinysrgb&w=800',
-    title: "Hair Styling",
-    description: "Professional hair styling and cutting services"
-  },
-  {
-    id: 2,
-    url: 'https://images.pexels.com/photos/3993456/pexels-photo-3993456.jpeg?auto=compress&cs=tinysrgb&w=800',
-    title: "Hair Coloring",
-    description: "Expert hair coloring and highlighting techniques"
-  },
-  {
-    id: 3,
-    url: 'https://images.pexels.com/photos/3764013/pexels-photo-3764013.jpeg?auto=compress&cs=tinysrgb&w=800',
-    title: "Hair Treatments",
-    description: "Nourishing hair treatments and deep conditioning"
-  },
-  {
-    id: 4,
-    url: 'https://images.pexels.com/photos/3993465/pexels-photo-3993465.jpeg?auto=compress&cs=tinysrgb&w=800',
-    title: "Bridal Services",
-    description: "Special bridal hair and makeup packages"
-  },
-  {
-    id: 5,
-    url: 'https://images.pexels.com/photos/3764011/pexels-photo-3764011.jpeg?auto=compress&cs=tinysrgb&w=800',
-    title: "Hair Extensions",
-    description: "Professional hair extension services"
-  },
-  {
-    id: 6,
-    url: 'https://images.pexels.com/photos/3993463/pexels-photo-3993463.jpeg?auto=compress&cs=tinysrgb&w=800',
-    title: "Hair Care",
-    description: "Complete hair care and maintenance services"
-  },
-  {
-    id: 7,
-    url: 'https://images.pexels.com/photos/3993449/pexels-photo-3993449.jpeg?auto=compress&cs=tinysrgb&w=800',
-    title: "Styling Consultation",
-    description: "Personalized styling consultations and advice"
-  },
-];

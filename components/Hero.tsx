@@ -120,8 +120,7 @@ const Hero = () => {
                   }}
               />
 
-              {/* Overlay */}
-              <div className="absolute inset-0 bg-hero-gradient" />
+              {/* Overlay removed per request */}
           </div>
 
           {/* Content */}
@@ -131,22 +130,22 @@ const Hero = () => {
           >
               <div className="max-w-4xl mx-auto">
                   {/* Main Tagline */}
-                  <h1 className="hero-title text-5xl sm:text-6xl lg:text-8xl font-serif font-[900] mb-6 text-gold-gradient">
+                  <h1 className="hero-title text-5xl sm:text-6xl lg:text-8xl font-gunterz font-md mb-6 text-primary-gradient tracking-wider">
                       <ShinyText
                           text={siteConfig.tagline}
                           disabled={false}
                           speed={3}
-                          className="text-5xl sm:text-6xl lg:text-8xl font-serif font-[900] px-4 py-2 uppercase text-gold-gradient"
+                          className="text-5xl sm:text-6xl lg:text-8xl font-gunterz font-md px-4 py-2 text-primary-gradient tracking-wider"
                       />
                   </h1>
 
                   {/* Subtitle */}
-                  <h3 className="hero-subtitle text-xl sm:text-4xl mb-4 text-gold">
+                  <h3 className="hero-subtitle text-xl sm:text-4xl mb-4 text-white">
                       Premium Family Salon Experience
                   </h3>
 
                   {/* Location */}
-                  <p className="hero-location text-lg mb-8 text-gray-200">
+                  <p className="hero-location text-lg mb-8 text-white">
                       North Paravur, Kerala
                   </p>
 

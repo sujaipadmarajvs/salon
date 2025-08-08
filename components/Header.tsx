@@ -41,60 +41,72 @@ const Header = () => {
   ];
 
   return (
-    <>
-      {/* Main Header */}
-      <header
-        ref={headerRef}
-        className="fixed w-full z-50 bg-transparent"
-      >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-20">
-            {/* Logo */}
-            <div className="flex-shrink-0">
-              <Link href="/" className="flex items-center">
-                <Image
-                  src="/BABU-White.png"
-                  alt={siteConfig.siteName}
-                  width={150}
-                  height={75}
-                  className="h-auto"
-                  priority
-                />
-              </Link>
-            </div>
-
-            {/* Desktop Navigation */}
-            <nav className="hidden md:flex items-center space-x-8">
-              {menuItems.map((item) => (
-                <Link
-                  key={item.name}
-                  href={item.href}
-                  className="text-white hover:text-gray-300 transition-colors"
-                >
-                  {item.name}
-                </Link>
-              ))}
-            </nav>
+      <>
+          {/* Top Banner */}
+          <div className="fixed top-0 left-0 right-0 w-full h-8 bg-primary-gradient text-white text-center text-sm z-50 flex items-center">
+              <div className="max-w-7xl mx-auto px-4 w-full">
+                  <span className="font-medium text-black">
+                      Glow Up Offer:
+                  </span>
+                  <span className="ml-2 opacity-90 text-black">
+                      Book today and get 20% off selected services
+                  </span>
+              </div>
           </div>
-        </div>
-      </header>
 
-      {/* Bottom Dock for Mobile */}
-      <div className="md:hidden fixed bottom-0 left-0 right-0 bg-black bg-opacity-80 backdrop-blur-sm shadow-lg z-50">
-        <div className="flex justify-around items-center h-16">
-          {menuItems.map((item) => (
-            <Link
-              key={item.name}
-              href={item.href}
-              className="flex flex-col items-center text-white hover:text-gray-300 transition-colors p-2"
-            >
-              {item.icon}
-              <span className="text-xs mt-1">{item.name}</span>
-            </Link>
-          ))}
-        </div>
-      </div>
-    </>
+          {/* Main Header */}
+          <header
+              ref={headerRef}
+              className="fixed top-8 w-full z-40 bg-transparent"
+          >
+              <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                  <div className="flex items-center justify-between h-20">
+                      {/* Logo */}
+                      <div className="flex-shrink-0">
+                          <Link href="/" className="flex items-center">
+                              <Image
+                                  src="/BABU-White.png"
+                                  alt={siteConfig.siteName}
+                                  width={150}
+                                  height={75}
+                                  className="h-auto"
+                                  priority
+                              />
+                          </Link>
+                      </div>
+
+                      {/* Desktop Navigation */}
+                      <nav className="hidden md:flex items-center space-x-8">
+                          {menuItems.map((item) => (
+                              <Link
+                                  key={item.name}
+                                  href={item.href}
+                                  className="text-white hover:text-gray-300 transition-colors"
+                              >
+                                  {item.name}
+                              </Link>
+                          ))}
+                      </nav>
+                  </div>
+              </div>
+          </header>
+
+          {/* Bottom Dock for Mobile */}
+          <div className="md:hidden fixed bottom-0 left-0 right-0 bg-black bg-opacity-80 backdrop-blur-sm shadow-lg z-50">
+              <div className="flex justify-around items-center h-16">
+                  {menuItems.map((item) => (
+                      <Link
+                          key={item.name}
+                          href={item.href}
+                          className="flex flex-col items-center text-white hover:text-gray-300 transition-colors p-2"
+                      >
+                          {item.icon}
+                          <span className="text-xs mt-1">{item.name}</span>
+                      </Link>
+                  ))}
+              </div>
+          </div>
+      </>
   );
 };
 
