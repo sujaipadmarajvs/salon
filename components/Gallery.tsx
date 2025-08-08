@@ -48,7 +48,7 @@ const Gallery = () => {
   // Auto-slideshow effect
   useEffect(() => {
     let interval: NodeJS.Timeout;
-    
+
     if (isAutoPlaying) {
       interval = setInterval(() => {
         setCurrentIndex((prev) => (prev + 1) % galleryImages.length);
@@ -92,11 +92,11 @@ const Gallery = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-16 fade-in-section">
-          <h2 className="text-4xl lg:text-5xl font-serif font-bold text-white mb-4">
+          <h2 className="text-4xl lg:text-6xl font-sans font-extrabold text-white mb-4">
             Our Gallery
           </h2>
           <div className="w-20 h-1 bg-gradient-to-r from-[#77530a] to-[#ffd277] mx-auto mb-6"></div>
-          <p className="text-lg text-white/80 max-w-2xl mx-auto">
+          <p className="text-lg text-white/80 max-w-2xl mx-auto tracking-wider">
             Take a glimpse into our luxurious salon environment and see the beautiful transformations we create every day.
           </p>
         </div>
@@ -110,7 +110,7 @@ const Gallery = () => {
               fill
               className="object-cover transition-all duration-500"
             />
-            
+
             {/* Navigation Buttons */}
             <button
               onClick={prevSlide}
@@ -171,7 +171,7 @@ const Gallery = () => {
               height={600}
               className="max-w-full max-h-full object-contain rounded-lg"
             />
-            
+
             {/* Close Button */}
             <button
               onClick={closeModal}

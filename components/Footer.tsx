@@ -105,7 +105,7 @@ const Footer = () => {
               </div>
               <div className="flex items-center space-x-3">
                 <Phone className="w-5 h-5 text-babu-accent-2" />
-                <a 
+                <a
                   href={`tel:${siteConfig.contact.phone}`}
                   className="text-gray-300 hover:text-white transition-colors"
                 >
@@ -114,7 +114,7 @@ const Footer = () => {
               </div>
               <div className="flex items-center space-x-3">
                 <Mail className="w-5 h-5 text-babu-accent-2" />
-                <a 
+                <a
                   href={`mailto:${siteConfig.contact.email}`}
                   className="text-gray-300 hover:text-white transition-colors"
                 >

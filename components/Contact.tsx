@@ -45,13 +45,13 @@ const Contact = () => {
     // Here you would typically send the form data to your backend
     // For now, we'll create a WhatsApp message
     const message = `Hi! I'd like to book an appointment at BA-BU Salon.
-    
+
 Name: ${formData.name}
 Email: ${formData.email}
 Phone: ${formData.phone}
 Service: ${formData.service}
 Message: ${formData.message}`;
-    
+
     const whatsappUrl = `https://wa.me/${siteConfig.contact.phone}?text=${encodeURIComponent(message)}`;
     window.open(whatsappUrl, '_blank');
   };
@@ -65,7 +65,7 @@ Message: ${formData.message}`;
             Contact Us
           </h2>
           <div className="w-20 h-1 bg-gradient-to-r from-[#77530a] to-[#ffd277] mx-auto mb-6"></div>
-          <p className="text-lg text-white/80 max-w-2xl mx-auto">
+          <p className="text-lg text-white/80 max-w-2xl mx-auto tracking-wider">
             Ready to transform your look? Get in touch with us to book your appointment or ask any questions.
           </p>
         </div>
@@ -74,7 +74,7 @@ Message: ${formData.message}`;
           {/* Contact Information */}
           <div className="fade-in-section">
             <h3 className="text-2xl font-serif font-bold text-babu-primary mb-8">Get In Touch</h3>
-            
+
             <div className="space-y-6">
               {/* Address */}
               <div className="flex items-start space-x-4">
@@ -94,7 +94,7 @@ Message: ${formData.message}`;
                 </div>
                 <div>
                   <h4 className="font-semibold text-babu-primary mb-1">Phone</h4>
-                  <a 
+                  <a
                     href={`tel:${siteConfig.contact.phone}`}
                     className="text-gray-600 hover:text-babu-teal transition-colors"
                   >
@@ -110,7 +110,7 @@ Message: ${formData.message}`;
                 </div>
                 <div>
                   <h4 className="font-semibold text-babu-primary mb-1">Email</h4>
-                  <a 
+                  <a
                     href={`mailto:${siteConfig.contact.email}`}
                     className="text-gray-600 hover:text-babu-teal transition-colors"
                   >
@@ -159,7 +159,7 @@ Message: ${formData.message}`;
           <div className="fade-in-section">
             <div className="bg-black border border-white/10 p-8 rounded-2xl shadow-xl">
               <h3 className="text-2xl font-serif font-bold text-white mb-6">Book Appointment</h3>
-              
+
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
@@ -261,7 +261,7 @@ Message: ${formData.message}`;
         <div className="mt-16 fade-in-section">
           <div className="bg-black border border-white/10 p-4 rounded-2xl shadow-xl">
             <h3 className="text-2xl font-serif font-bold text-white mb-6 text-center">Find Us</h3>
-            
+
             {/* Location Tabs */}
             <div className="flex justify-center mb-6">
               <div className="flex bg-white/10 rounded-lg p-1">
@@ -315,7 +315,7 @@ Message: ${formData.message}`;
             </div>
             <div className="text-center mt-4">
               <a
-                href={activeLocation === 'mannam' 
+                href={activeLocation === 'mannam'
                   ? "https://maps.google.com/?q=BA-BU+FAMILY+SALON+Mannam"
                   : "https://maps.google.com/?q=BA-BU+North+Paravur"
                 }

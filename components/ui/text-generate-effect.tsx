@@ -1,40 +1,29 @@
-"use client";
+'use client';
+import { useEffect } from 'react';
+import { motion, stagger, useAnimate } from 'framer-motion';
+import { cn } from '@/lib/utils';
 
-import { useEffect, useRef } from "react";
-import { motion, stagger, useAnimate } from "framer-motion";
-
-export const TextGenerateEffect = ({ words }: { words: string }) => {
+export const TextGenerateEffect = ({
+  words,
+  className,
+}: {
+  words: string;
+  className?: string;
+}) => {
   const [scope, animate] = useAnimate();
-  const ref = useRef<HTMLDivElement>(null);
-  let wordsArray = words.split(" ");
-
+  let wordsArray = words.split(' ');
   useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            animate(
-              "span",
-              {
-                opacity: 1,
-              },
-              {
-                duration: 2,
-                delay: stagger(0.1),
-              }
-            );
-          }
-        });
+    animate(
+      'span',
+      {
+        opacity: 1,
       },
-      { threshold: 0.1 }
+      {
+        duration: 2,
+        delay: stagger(0.2),
+      }
     );
-
-    if (ref.current) {
-      observer.observe(ref.current);
-    }
-
-    return () => observer.disconnect();
-  }, [animate]);
+  }, [scope.current]);
 
   const renderWords = () => {
     return (
@@ -43,9 +32,9 @@ export const TextGenerateEffect = ({ words }: { words: string }) => {
           return (
             <motion.span
               key={word + idx}
-              className="text-white opacity-0"
+              className="opacity-0"
             >
-              {word}{" "}
+              {word}{' '}
             </motion.span>
           );
         })}
@@ -54,8 +43,12 @@ export const TextGenerateEffect = ({ words }: { words: string }) => {
   };
 
   return (
-    <div ref={ref} className="text-base leading-relaxed tracking-wide">
-      {renderWords()}
+    <div className={cn('font-bold', className)}>
+      <div className="mt-4">
+        <div className="tracking-wide">
+          {renderWords()}
+        </div>
+      </div>
     </div>
   );
 };

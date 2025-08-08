@@ -13,11 +13,11 @@
   color: transparent;
   background-image: linear-gradient(
     to right,
-    #77530a 0%,
-    #ffd277 25%,
-    #77530a 50%,
-    #ffd277 75%,
-    #77530a 100%
+    var(--color-secondary) 0%,
+    #ffffff 25%,
+    var(--color-secondary) 50%,
+    #ffffff 75%,
+    var(--color-secondary) 100%
   );
   background-size: 200% 100%;
   -webkit-background-clip: text;

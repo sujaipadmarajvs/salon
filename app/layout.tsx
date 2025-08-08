@@ -1,18 +1,36 @@
 import './globals.css';
 import type { Metadata } from 'next';
-import { Playfair_Display, Inter } from 'next/font/google';
+import localFont from 'next/font/local';
 import { siteConfig } from '@/config/site';
+import SmoothScroller from '@/components/SmoothScroller';
 
-const playfair = Playfair_Display({ 
-  subsets: ['latin'],
-  variable: '--font-playfair',
-  display: 'swap'
+const sofila = localFont({
+  src: [
+    {
+      path: '../public/fonts/sofila/SOFILA.ttf',
+      weight: '400',
+      style: 'normal',
+    },
+    {
+      path: '../public/fonts/sofila/SOFILA-Italic.ttf',
+      weight: '400',
+      style: 'italic',
+    },
+  ],
+  variable: '--font-sofila',
+  display: 'swap',
 });
 
-const inter = Inter({ 
-  subsets: ['latin'],
-  variable: '--font-inter',
-  display: 'swap'
+const francy = localFont({
+  src: [
+    {
+      path: '../public/fonts/francy/Francy.woff2',
+      weight: '400',
+      style: 'normal',
+    },
+  ],
+  variable: '--font-francy',
+  display: 'swap',
 });
 
 export const metadata: Metadata = {
@@ -28,7 +46,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`${inter.variable} ${playfair.variable} font-sans`}>{children}</body>
+      <body className={`${sofila.variable} ${francy.variable} font-sans`}>
+        <SmoothScroller />
+        {children}
+      </body>
     </html>
   );
 }

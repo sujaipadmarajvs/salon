@@ -144,11 +144,11 @@ const Testimonials = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-16 fade-in-section">
-          <h2 className="text-4xl lg:text-5xl font-serif font-bold mb-4">
+          <h2 className="text-4xl lg:text-6xl font-serif font-extrabold mb-4">
             What Our Clients Say
           </h2>
           <div className="w-20 h-1 bg-babu-accent-2 mx-auto mb-6"></div>
-          <p className="text-lg text-white/80 max-w-2xl mx-auto">
+          <p className="text-lg text-white/80 max-w-2xl mx-auto tracking-wider">
             Don't just take our word for it. Here's what our satisfied clients have to say about their experience at BA-BU Family Salon.
           </p>
         </div>
