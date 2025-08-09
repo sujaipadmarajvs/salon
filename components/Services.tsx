@@ -20,7 +20,7 @@ const Services = () => {
   }));
 
   useEffect(() => {
-    const mm = ScrollTrigger.matchMedia();
+    const mm = gsap.matchMedia();
 
     mm.add("(min-width: 768px)", () => {
       if (!containerRef.current || !sectionRef.current) return;
@@ -29,8 +29,6 @@ const Services = () => {
       const container = containerRef.current;
       const panels = gsap.utils.toArray(".panel");
       const numPanels = panels.length;
-
-      gsap.set(".content-overlay", { y: 30, opacity: 0 });
 
       const pin = gsap.to(container, {
         x: () => -(container.scrollWidth - window.innerWidth),
@@ -51,17 +49,29 @@ const Services = () => {
       });
 
       panels.forEach((panel: any) => {
-        const overlay = panel.querySelector('.content-overlay');
-        ScrollTrigger.create({
-          trigger: panel,
-          containerAnimation: pin,
-          start: 'left center',
-          end: 'right center',
-          onEnter: () => gsap.to(overlay, { y: 0, opacity: 1, duration: 0.5, ease: 'power2.out' }),
-          onLeave: () => gsap.to(overlay, { y: 30, opacity: 0, duration: 0.5, ease: 'power2.in' }),
-          onEnterBack: () => gsap.to(overlay, { y: 0, opacity: 1, duration: 0.5, ease: 'power2.out' }),
-          onLeaveBack: () => gsap.to(overlay, { y: 30, opacity: 0, duration: 0.5, ease: 'power2.in' }),
+        const title = panel.querySelector('h2');
+        const desc = panel.querySelector('p');
+        const cta = panel.querySelector('button');
+
+        const tl = gsap.timeline({
+          scrollTrigger: {
+            trigger: panel,
+            containerAnimation: pin,
+            start: 'left center',
+            end: 'right center',
+            toggleActions: 'play none none reverse',
+          },
         });
+
+        if(title && desc && cta) {
+            tl.from([title, desc, cta], {
+                y: 50,
+                opacity: 0,
+                duration: 0.6,
+                ease: 'power3.out',
+                stagger: 0.2
+            });
+        }
       });
 
       return () => {
@@ -72,20 +82,34 @@ const Services = () => {
 
     mm.add("(max-width: 767px)", () => {
       if (!mobileSectionRef.current) return;
-      
+
       const mobileCards = gsap.utils.toArray(".mobile-service-card");
       mobileCards.forEach((card: any) => {
-        gsap.from(card, {
-          y: 50,
-          opacity: 0,
-          duration: 0.8,
-          ease: 'power3.out',
+        const title = card.querySelector('h3');
+
+        const tl = gsap.timeline({
           scrollTrigger: {
             trigger: card,
             start: 'top 90%',
             toggleActions: 'play none none none',
           }
         });
+
+        tl.from(card, {
+          y: 50,
+          opacity: 0,
+          duration: 0.8,
+          ease: 'power3.out',
+        });
+
+        if (title) {
+          tl.from(title, {
+            yPercent: 50,
+            opacity: 0,
+            duration: 0.6,
+            ease: 'power3.out',
+          }, "-=0.5");
+        }
       });
 
       return () => {

@@ -1,6 +1,6 @@
 'use client';
-import { useEffect } from 'react';
-import { motion, stagger, useAnimate } from 'framer-motion';
+import { useLayoutEffect, useRef } from 'react';
+import { gsap } from 'gsap';
 import { cn } from '@/lib/utils';
 
 export const TextGenerateEffect = ({
@@ -10,43 +10,31 @@ export const TextGenerateEffect = ({
   words: string;
   className?: string;
 }) => {
-  const [scope, animate] = useAnimate();
-  let wordsArray = words.split(' ');
-  useEffect(() => {
-    animate(
-      'span',
-      {
-        opacity: 1,
-      },
-      {
-        duration: 2,
-        delay: stagger(0.2),
-      }
-    );
-  }, [scope.current]);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const wordsArray = words.split(' ');
 
-  const renderWords = () => {
-    return (
-      <motion.div ref={scope}>
-        {wordsArray.map((word, idx) => {
-          return (
-            <motion.span
-              key={word + idx}
-              className="opacity-0"
-            >
-              {word}{' '}
-            </motion.span>
-          );
-        })}
-      </motion.div>
-    );
-  };
+  useLayoutEffect(() => {
+    if (!containerRef.current) return;
+    const ctx = gsap.context(() => {
+      const spans = containerRef.current!.querySelectorAll('span');
+      gsap.fromTo(
+        spans,
+        { opacity: 0 },
+        { opacity: 1, duration: 2, stagger: 0.2, ease: 'power1.out' }
+      );
+    }, containerRef);
+    return () => ctx.revert();
+  }, []);
 
   return (
     <div className={cn('font-bold', className)}>
       <div className="mt-4">
-        <div className="tracking-wide">
-          {renderWords()}
+        <div className="tracking-wide" ref={containerRef}>
+          {wordsArray.map((word, idx) => (
+            <span key={word + idx} className="opacity-0">
+              {word}{' '}
+            </span>
+          ))}
         </div>
       </div>
     </div>

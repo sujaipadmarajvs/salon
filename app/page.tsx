@@ -7,7 +7,7 @@ import Testimonials from "@/components/Testimonials";
 import Contact from "@/components/Contact";
 import WhatsAppChat from "@/components/WhatsAppChat";
 import ScrollToTop from "@/components/ScrollToTop";
-import ChromaGrid from "@/components/ChromaGrid";
+import GalleryPreview from "@/components/GalleryPreview";
 
 export default function Home() {
     return (
@@ -17,7 +17,7 @@ export default function Home() {
                 <Hero />
                 <About />
                 <Services />
-                <ChromaGrid />
+                <GalleryPreview />
                 <Testimonials />
                 <Contact />
             </main>

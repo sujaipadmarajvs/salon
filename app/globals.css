@@ -163,7 +163,7 @@
   .btn-gradient:active { transform: scale(0.97); }
 
 /* Custom Scrollbar */
-::-webkit-scrollbar {
+/* ::-webkit-scrollbar {
   width: 12px;
 }
 
@@ -178,4 +178,4 @@
 
 ::-webkit-scrollbar-thumb:hover {
   background: linear-gradient(to bottom, var(--color-ternary), var(--color-secondary));
-}
+} */
