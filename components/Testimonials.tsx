@@ -183,14 +183,7 @@ const Testimonials = () => {
           </div>
         </div>
 
-        {/* Decorative element */}
-        <div className="absolute top-4 right-4 w-8 h-8 rounded-full bg-amber-400/20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300">
-          <div className="w-3 h-3 rounded-full bg-amber-400 animate-pulse"></div>
-        </div>
-        {/* Additional golden accent */}
-        <div className="absolute bottom-4 left-4 w-6 h-6 rounded-full bg-yellow-400/20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-500">
-          <div className="w-2 h-2 rounded-full bg-yellow-400"></div>
-        </div>
+        
       </div>
     );
   };
