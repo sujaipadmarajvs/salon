@@ -140,10 +140,11 @@ Message: ${formData.message}`;
                 href={siteConfig.contact.whatsapp}
                 target="_blank"
                 rel="noopener noreferrer"
+                aria-label="Book salon appointment on WhatsApp in North Paravur"
                 className="flex items-center justify-center space-x-2 bg-gradient-to-r from-[#77530a] to-[#ffd277] hover:from-[#ffd277] hover:to-[#77530a] text-white px-6 py-3 rounded-full font-semibold transition-all duration-300 w-full hover:scale-105"
               >
                 <MessageCircle className="w-5 h-5" />
-                <span>WhatsApp Us</span>
+                <span>Book Salon Appointment on WhatsApp</span>
               </a>
               <a
                 href={`tel:${siteConfig.contact.phone}`}

@@ -102,8 +102,10 @@ const Services = () => {
     <>
       <section id="services-section-desktop" ref={sectionRef} className="relative bg-black overflow-hidden hidden md:block">
         <div id="services-container-desktop" ref={containerRef} className="h-screen w-max flex items-center relative">
-          {services.map((service, index) => (
-            <div id={`service-panel-desktop-${index}`} key={index} className="panel w-screen h-screen relative flex items-center justify-center">
+          {services.map((service, index) => {
+            const isBridal = /bridal/i.test(service.name);
+            return (
+            <div id={isBridal ? 'bridal-services' : `service-panel-desktop-${index}`} key={index} className="panel w-screen h-screen relative flex items-center justify-center">
               <Image
                 src={service.src}
                 alt={service.name}
@@ -116,12 +118,15 @@ const Services = () => {
               <div id={`service-content-desktop-${index}`} className="content-overlay relative text-white text-center max-w-2xl mx-auto px-4">
                 <h2 className="text-5xl lg:text-7xl font-bold font-serif mb-4">{service.name}</h2>
                 <p className="text-lg lg:text-xl text-white/80 mb-6">{service.description}</p>
-                <button className="text-lg font-semibold border-b-2 border-secondary text-secondary hover:bg-secondary hover:text-black transition-all duration-300 px-4 py-2">
-                  Book Now <ArrowRight className="inline-block ml-2" />
+                <button
+                  aria-label="Book salon appointment in North Paravur"
+                  className="text-lg font-semibold border-b-2 border-secondary text-secondary hover:bg-secondary hover:text-black transition-all duration-300 px-4 py-2"
+                >
+                  Book Salon Appointment in North Paravur <ArrowRight className="inline-block ml-2" />
                 </button>
               </div>
             </div>
-          ))}
+          );})}
         </div>
       </section>
 
@@ -131,14 +136,16 @@ const Services = () => {
             <div className="w-20 h-1 bg-gradient-to-r from-secondary to-yellow-300 mx-auto"></div>
         </div>
         <div id="services-grid-mobile" className="grid grid-cols-1 gap-8 px-4">
-          {services.map((service, index) => (
-            <div id={`service-card-mobile-${index}`} key={index} className="mobile-service-card relative h-96 rounded-lg overflow-hidden cursor-pointer group shadow-lg">
+          {services.map((service, index) => {
+            const isBridal = /bridal/i.test(service.name);
+            return (
+            <div id={isBridal ? 'bridal-services' : `service-card-mobile-${index}`} key={index} className="mobile-service-card relative h-96 rounded-lg overflow-hidden cursor-pointer group shadow-lg">
               <Image src={service.src} alt={service.name} fill className="object-cover" />
               <div className="absolute inset-0 bg-black/50 group-hover:bg-black/30 transition-colors duration-300 flex items-end p-6">
                 <h3 className="text-white text-2xl font-semibold">{service.name}</h3>
               </div>
             </div>
-          ))}
+          );})}
         </div>
       </section>
     </>

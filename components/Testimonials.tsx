@@ -175,7 +175,11 @@ const Testimonials = () => {
             </div>
             <div>
               <h4 className="font-semibold text-white">{name}</h4>
-              <p className="text-sm text-gray-400">{username}</p>
+              <p className="text-sm text-gray-400">
+                <a href="#bridal-services" className="underline decoration-amber-400/60 underline-offset-4 hover:text-white transition-colors" aria-label="Explore bridal makeup services in North Paravur">
+                  {username}
+                </a>
+              </p>
               <div className="flex mt-1">
                 {renderStars(rating)}
               </div>
