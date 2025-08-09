@@ -258,7 +258,7 @@ Message: ${formData.message}`;
         </div>
 
         {/* Map Section */}
-        <div className="mt-16 fade-in-section">
+        <div className="mt-16 fade-in-section relative left-1/2 right-1/2 -translate-x-1/2 w-screen">
           <div className="bg-black border border-white/10 p-4 rounded-2xl shadow-xl">
             <h3 className="text-2xl font-serif font-bold text-white mb-6 text-center">Find Us</h3>
 
@@ -288,7 +288,7 @@ Message: ${formData.message}`;
               </div>
             </div>
 
-            <div className="aspect-video rounded-lg overflow-hidden">
+            <div className="relative aspect-[23/9] rounded-lg overflow-hidden">
               {activeLocation === 'mannam' ? (
                 <iframe
                   src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d251354.21895944458!2d76.2483281!3d10.1473162!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3b081ba5e09b9cad%3A0x363ca14465d8a7c!2sBA-BU%20FAMILY%20SALON!5e0!3m2!1sen!2sin!4v1754569333582!5m2!1sen!2sin"
@@ -312,6 +312,7 @@ Message: ${formData.message}`;
                   title="BA-BU Family Salon North Paravur Location"
                 />
               )}
+              <div aria-hidden="true" className="pointer-events-none absolute inset-0 rounded-lg bg-gradient-to-b from-black/40 via-transparent to-black/70" />
             </div>
             <div className="text-center mt-4">
               <a

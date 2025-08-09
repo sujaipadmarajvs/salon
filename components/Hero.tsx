@@ -17,11 +17,7 @@ const Hero = () => {
   const videoContainerRef = useRef<HTMLDivElement>(null);
   const sectionRef = useRef<HTMLElement>(null);
 
-  const videos = [
-    '/hero1.mp4',
-    '/hero2.mp4',
-    '/hero3.mp4'
-  ];
+  const videos = ['/hero-full.MP4'];
 
   useEffect(() => {
     if (contentRef.current) {

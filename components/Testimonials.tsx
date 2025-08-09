@@ -229,7 +229,7 @@ const Testimonials = () => {
           {/* Testimonials Grid */}
           <div
             ref={containerRef}
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-h-[600px] overflow-hidden w-full"
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-h-[800px] overflow-hidden w-full"
           >
             {columns.map((column, colIndex) => (
               <div
