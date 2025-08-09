@@ -153,8 +153,8 @@ const Testimonials = () => {
     return (
               <div className="relative p-6 rounded-2xl border transition-all duration-700 ease-out hover:scale-105 hover:shadow-2xl hover:border-amber-400/70 bg-gray-900/50 backdrop-blur-sm border-gray-700/50 group">
         {/* Glow effect overlay */}
-        <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-amber-400/30 to-yellow-300/30 opacity-0 group-hover:opacity-90 transition-opacity duration-500 blur-xl"></div>
-        <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-yellow-400/20 to-amber-500/20 opacity-0 group-hover:opacity-85 transition-opacity duration-400 blur-lg"></div>
+        <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-amber-400/30 to-yellow-300/30 opacity-0 group-hover:opacity-90 transition-opacity duration-500 blur-2xl"></div>
+        <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-yellow-400/20 to-amber-500/20 opacity-0 group-hover:opacity-85 transition-opacity duration-400 blur-xl"></div>
 
         {/* Content container */}
         <div className="relative z-10">
