@@ -13,14 +13,23 @@ gsap.registerPlugin(ScrollTrigger);
 const Header = () => {
     const headerRef = useRef<HTMLElement>(null);
     const [isScrolled, setIsScrolled] = useState(false);
+    const [hideOnScroll, setHideOnScroll] = useState(false);
+    const lastScrollYRef = useRef(0);
     const [showPromoBanner, setShowPromoBanner] = useState(true);
 
     useEffect(() => {
         const handleScroll = () => {
-            setIsScrolled(window.scrollY > 10);
+            const currentY = window.scrollY || 0;
+            setIsScrolled(currentY > 10);
+
+            const goingDown = currentY > lastScrollYRef.current;
+            const beyondThreshold = currentY > 80;
+            setHideOnScroll(goingDown && beyondThreshold);
+
+            lastScrollYRef.current = currentY;
         };
 
-        window.addEventListener("scroll", handleScroll);
+        window.addEventListener("scroll", handleScroll, { passive: true });
         return () => window.removeEventListener("scroll", handleScroll);
     }, []);
 
@@ -101,10 +110,10 @@ const Header = () => {
                 </div>
             )}
             {/* Main Header */}
-            <header
-                ref={headerRef}
-                className="fixed top-10 w-full z-40 bg-transparent"
-            >
+          <header
+              ref={headerRef}
+              className={`fixed w-full z-40 bg-transparent transition-transform duration-300 ${hideOnScroll ? "-translate-y-full" : "translate-y-0"}`}
+          >
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="flex items-center justify-between h-20">
                         {/* Logo */}

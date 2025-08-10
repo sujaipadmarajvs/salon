@@ -3,7 +3,7 @@
 import { useEffect, useRef } from 'react';
 import Image from 'next/image';
 import { Award, Users, Clock, Star } from 'lucide-react';
-import AnimatedButton from './AnimatedButton';
+import SplitText from './SplitText';
 import CountUp from './CountUp';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -59,13 +59,6 @@ const About = () => {
       });
 
       timeline
-        .from(content.children, {
-          x: 100,
-          opacity: 0,
-          duration: 1,
-          stagger: 0.2,
-          ease: 'power3.out',
-        })
         .from(stats.children, {
           y: 50,
           opacity: 0,
@@ -87,7 +80,7 @@ const About = () => {
     const handleMouseMove = (e: MouseEvent) => {
       const { clientX, clientY } = e;
       const { width, height, left, top } = section.getBoundingClientRect();
-      
+
       const x = clientX - left;
       const y = clientY - top;
 
@@ -157,7 +150,7 @@ const About = () => {
                               alt="BA-BU Salon Interior 1"
                               width={400}
                               height={600}
-                              className="rounded-lg shadow-2xl object-cover w-full h-full"
+                              className="shadow-2xl object-cover w-full h-full"
                           />
                       </div>
                       <div
@@ -169,16 +162,21 @@ const About = () => {
                               alt="BA-BU Salon Interior 2"
                               width={400}
                               height={600}
-                              className="rounded-lg shadow-2xl object-cover w-full h-full"
+                              className="shadow-2xl object-cover w-full h-full"
                           />
                       </div>
                   </div>
 
                   {/* Content Column */}
                   <div ref={contentRef}>
-                      <h2 className="text-4xl lg:text-5xl font-black text-white mb-4 font-sans">
-                          About <span className="text-gold text-5xl lg:text-6xl font-[900] font-sans">BA-BU</span> Family Saloon
-                      </h2>
+                      <SplitText
+                          text="About BA-BU Family Saloon"
+                          className="text-4xl lg:text-5xl font-black text-white mb-4 font-sans"
+                          splitType="words"
+                          textAlign="left"
+                          duration={0.8}
+                          delay={80}
+                      />
                       <div className="w-24 h-1 bg-gold mb-6"></div>
 
                       <p className="text-lg text-gray-300 mb-6 leading-relaxed tracking-wider">
@@ -198,39 +196,42 @@ const About = () => {
                       </p>
 
                       {/* Stats Section */}
-                      <div ref={statsRef} className="grid grid-cols-2 md:grid-cols-4 gap-8 my-12">
-                        {stats.map((stat, index) => (
-                          <div key={index} className="text-center transition-transform duration-300 ease-in-out hover:scale-110">
-                            <div className="flex justify-center mb-2">
-                              <stat.icon className="w-10 h-10 text-gold" />
-                            </div>
-                            <h3 className="text-4xl font-bold text-white">
-                              {stat.label === 'Service Support' ? (
-                                stat.number
-                              ) : (
-                                <>
-                                  <CountUp end={parseFloat(stat.number)} duration={3} decimals={stat.number.includes('.') ? 1 : 0} />
-                                  {stat.number.includes('+') && '+'}
-                                </>
-                              )}
-                            </h3>
-                            <p className="text-gray-400 mt-1">{stat.label}</p>
-                          </div>
-                        ))}
+                      <div
+                          ref={statsRef}
+                          className="grid grid-cols-2 md:grid-cols-4 gap-8 my-12"
+                      >
+                          {stats.map((stat, index) => (
+                              <div
+                                  key={index}
+                                  className="text-center transition-transform duration-300 ease-in-out hover:scale-110"
+                              >
+                                  <div className="flex justify-center mb-2">
+                                      <stat.icon className="w-10 h-10 text-gold" />
+                                  </div>
+                                  <h3 className="text-4xl font-bold text-white">
+                                      {stat.label === "Service Support" ? (
+                                          stat.number
+                                      ) : (
+                                          <>
+                                              <CountUp
+                                                  end={parseFloat(stat.number)}
+                                                  duration={3}
+                                                  decimals={
+                                                      stat.number.includes(".")
+                                                          ? 1
+                                                          : 0
+                                                  }
+                                              />
+                                              {stat.number.includes("+") && "+"}
+                                          </>
+                                      )}
+                                  </h3>
+                                  <p className="text-gray-400 mt-1">
+                                      {stat.label}
+                                  </p>
+                              </div>
+                          ))}
                       </div>
-
-                      <AnimatedButton
-                          text="Book Your Appointment"
-                          onClick={() => {
-                              const contactSection =
-                                  document.getElementById("contact");
-                              if (contactSection) {
-                                  contactSection.scrollIntoView({
-                                      behavior: "smooth",
-                                  });
-                              }
-                          }}
-                      />
                   </div>
               </div>
           </div>
