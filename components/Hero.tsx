@@ -1,25 +1,51 @@
 'use client';
 
 import { useEffect, useState, useRef } from 'react';
-import { ChevronDown } from 'lucide-react';
 import { siteConfig } from '@/config/site';
 import ShinyText from './ShinyText';
 import AnimatedButton from './AnimatedButton';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+gsap.registerPlugin(ScrollTrigger);
 
 const Hero = () => {
-  const [isLoaded, setIsLoaded] = useState(false);
   const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
   const videoRefs = useRef<(HTMLVideoElement | null)[]>([]);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
+  const contentRef = useRef<HTMLDivElement>(null);
+  const videoContainerRef = useRef<HTMLDivElement>(null);
+  const sectionRef = useRef<HTMLElement>(null);
 
-  const videos = [
-    '/hero1.mp4',
-    '/hero2.mp4',
-    '/hero3.mp4'
-  ];
+  const videos = ['/hero-full.MP4'];
 
   useEffect(() => {
-    setIsLoaded(true);
+    if (contentRef.current) {
+      const timeline = gsap.timeline({ defaults: { ease: 'power3.out' } });
+      timeline
+        .from('.hero-title', { opacity: 0, y: 30, duration: 1 })
+        .from('.hero-subtitle', { opacity: 0, y: 30, duration: 1 }, '-=0.7')
+        .from('.hero-location', { opacity: 0, y: 30, duration: 1 }, '-=0.7')
+        .from('.hero-cta', { opacity: 0, y: 30, duration: 1 }, '-=0.7');
+    }
+  }, []);
+
+  useEffect(() => {
+    const section = sectionRef.current;
+    const videoContainer = videoContainerRef.current;
+
+    if (section && videoContainer) {
+      gsap.to(videoContainer, {
+        y: '30%',
+        ease: 'none',
+        scrollTrigger: {
+          trigger: section,
+          start: 'top top',
+          end: 'bottom top',
+          scrub: true,
+        },
+      });
+    }
   }, []);
 
   useEffect(() => {
@@ -57,86 +83,78 @@ const Hero = () => {
   };
 
   return (
-    <section className="relative h-screen flex items-center justify-center overflow-hidden">
-      {/* Video Background Carousel */}
-      <div className="absolute inset-0 z-0">
-        {videos.map((videoSrc, index) => (
-          <video
-            key={videoSrc}
-            ref={(el) => (videoRefs.current[index] = el)}
-            autoPlay={index === 0}
-            muted
-            loop
-            playsInline
-            className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ${
-              index === currentVideoIndex ? 'opacity-100' : 'opacity-0'
-            }`}
-          >
-            <source src={videoSrc} type="video/mp4" />
-            Your browser does not support the video tag.
-          </video>
-        ))}
-        
-        {/* Fallback Background Image */}
-        <div 
-          className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-0"
-          style={{
-            backgroundImage: `url('https://images.pexels.com/photos/3993449/pexels-photo-3993449.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&fit=crop')`
-          }}
-        />
-        
-        {/* Overlay */}
-        <div className="absolute inset-0 bg-hero-gradient" />
-      </div>
+      <section
+          ref={sectionRef}
+          className="relative h-screen flex items-center justify-center overflow-hidden"
+      >
+          {/* Video Background Carousel */}
+          <div ref={videoContainerRef} className="absolute inset-0 z-0">
+              {videos.map((videoSrc, index) => (
+                  <video
+                      key={videoSrc}
+                      ref={(el) => (videoRefs.current[index] = el)}
+                      autoPlay={index === 0}
+                      muted
+                      loop
+                      playsInline
+                      className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ${
+                          index === currentVideoIndex
+                              ? "opacity-100"
+                              : "opacity-0"
+                      }`}
+                  >
+                      <source src={videoSrc} type="video/mp4" />
+                      Your browser does not support the video tag.
+                  </video>
+              ))}
 
+              {/* Fallback Background Image */}
+              <div
+                  className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-0"
+                  style={{
+                      backgroundImage: `url('https://images.pexels.com/photos/3993449/pexels-photo-3993449.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&fit=crop')`,
+                  }}
+              />
 
-
-      {/* Content */}
-      <div className="relative z-10 text-center text-white px-4 sm:px-6 lg:px-8">
-        <div className="max-w-4xl mx-auto">
-          {/* Main Tagline */}
-          <h1 
-            className={`text-5xl sm:text-6xl lg:text-7xl font-serif font-bold mb-6 transition-all duration-1000 ${
-              isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
-            }`}
-          >
-            <ShinyText text={siteConfig.tagline} disabled={false} speed={3} className="text-5xl sm:text-6xl lg:text-7xl font-serif font-bold" />
-          </h1>
-          
-          {/* Subtitle */}
-          <p 
-            className={`text-xl sm:text-2xl mb-4 text-babu-accent-2 transition-all duration-1000 delay-300 ${
-              isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
-            }`}
-          >
-            Premium Family Salon Experience
-          </p>
-          
-          {/* Location */}
-          <p 
-            className={`text-lg mb-8 text-gray-200 transition-all duration-1000 delay-500 ${
-              isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
-            }`}
-          >
-            North Paravur, Kerala
-          </p>
-          
-          {/* CTA Button */}
-          <div 
-            className={`flex justify-center transition-all duration-1000 delay-700 ${
-              isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
-            }`}
-          >
-            <AnimatedButton
-              text={siteConfig.hero.ctaText}
-              onClick={scrollToContact}
-            />
+              {/* Overlay removed per request */}
           </div>
-        </div>
-      </div>
 
+          {/* Content */}
+          <div
+              ref={contentRef}
+              className="relative z-10 text-center text-white px-4 sm:px-6 lg:px-8"
+          >
+              <div className="max-w-4xl mx-auto">
+                  {/* Main Tagline */}
+                  <h1 className="hero-title text-5xl sm:text-6xl lg:text-8xl font-gunterz font-md mb-6 text-primary-gradient tracking-wider">
+                      <ShinyText
+                          text={siteConfig.tagline}
+                          disabled={false}
+                          speed={3}
+                          className="text-5xl sm:text-6xl lg:text-8xl font-gunterz font-md px-4 py-2 text-primary-gradient tracking-wider"
+                      />
+                  </h1>
 
-    </section>
+                  {/* Subtitle */}
+                  <h3 className="hero-subtitle text-xl sm:text-4xl mb-4 text-white">
+                      Premium Family Salon Experience
+                  </h3>
+
+                  {/* Location */}
+                  <p className="hero-location text-lg mb-8 text-white">
+                      North Paravur, Kerala
+                  </p>
+
+                  {/* CTA Button */}
+                  <div className="hero-cta flex justify-center">
+                      <AnimatedButton
+                          text={siteConfig.hero.ctaText}
+                          onClick={scrollToContact}
+                      />
+                  </div>
+              </div>
+          </div>
+      </section>
   );
 };
 

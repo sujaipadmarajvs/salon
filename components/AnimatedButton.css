@@ -31,23 +31,16 @@
   background-size: 200%;
 }
 
-.Btn:hover {
-  background-position: right;
-  transition-duration: 1s;
-}
-
-.Btn:hover::before {
-  background-position: right;
-  transition-duration: 1s;
-}
-
-.Btn:active {
-  transform: scale(0.95);
-}
+.Btn:hover { background-position: right; transition-duration: 1s; }
+.Btn:hover::before { background-position: right; transition-duration: 1s; }
+.Btn:active { transform: scale(0.95); }
 
 .button-text {
   position: relative;
   z-index: 1;
-  color: #ffd277;
+  background: linear-gradient(to right,#77530a,#ffd277);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
   font-weight: bold;
 }

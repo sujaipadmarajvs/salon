@@ -1,72 +1,61 @@
 import './globals.css';
 import type { Metadata } from 'next';
-import { Playfair_Display, Inter } from 'next/font/google';
 import { siteConfig } from '@/config/site';
 import StructuredData from '@/components/StructuredData';
+import SmoothScroller from '@/components/SmoothScroller';
 
-const playfair = Playfair_Display({ 
-  subsets: ['latin'],
-  variable: '--font-playfair',
-  display: 'swap'
-});
 
-const inter = Inter({ 
-  subsets: ['latin'],
-  variable: '--font-inter',
-  display: 'swap'
-});
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://babusalon.com';
 
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://babusalon.com'),
   title: {
-    default: siteConfig.siteName,
+    default: `${siteConfig.siteName} | Hair, Skin, Bridal & Men's Grooming in North Paravur`,
     template: `%s | ${siteConfig.siteName}`,
   },
-  description: siteConfig.description,
+  description:
+    'Premium family salon in North Paravur, Kerala offering tailored haircuts, hair coloring, facials, bridal makeup, men\'s grooming, and hair spa. Book your salon appointment on WhatsApp today.',
   keywords: [
-    'salon',
-    'beauty',
-    'hair',
-    'spa',
-    'North Paravur',
-    'Kerala',
+    'family salon',
+    'North Paravur salon',
+    'Kerala salon',
+    'hair styling',
+    'hair coloring',
     'bridal makeup',
+    'facial treatments',
+    "men's grooming",
+    'hair spa',
+    'scalp treatments',
+    'kids haircuts',
+    'book salon appointment',
+    'WhatsApp booking',
+    'beauty services',
   ],
-  authors: [{ name: siteConfig.siteName }],
-  creator: siteConfig.siteName,
+  alternates: { canonical: siteUrl },
   openGraph: {
     type: 'website',
-    locale: 'en_US',
-    url: process.env.NEXT_PUBLIC_SITE_URL || 'https://babusalon.com',
-    title: siteConfig.siteName,
-    description: siteConfig.description,
+    url: siteUrl,
     siteName: siteConfig.siteName,
+    title: `${siteConfig.siteName} | Hair, Skin, Bridal & Men's Grooming in North Paravur`,
+    description:
+      'Premium family salon in North Paravur, Kerala offering tailored haircuts, hair coloring, facials, bridal makeup, men\'s grooming, and hair spa.',
     images: [
       {
-        url: '/BABU-White.png',
+        url: `${siteUrl}/BABU-White.png`,
         width: 1200,
         height: 630,
-        alt: siteConfig.siteName,
+        alt: `${siteConfig.siteName} – BA-BU Family Salon`,
       },
     ],
+    locale: 'en_IN',
   },
   twitter: {
     card: 'summary_large_image',
-    title: siteConfig.siteName,
-    description: siteConfig.description,
-    images: ['/BABU-White.png'],
+    title: `${siteConfig.siteName} | Hair, Skin, Bridal & Men's Grooming in North Paravur`,
+    description:
+      'Premium family salon in North Paravur, Kerala offering tailored haircuts, hair coloring, facials, bridal makeup, men\'s grooming, and hair spa.',
+    images: [`${siteUrl}/BABU-White.png`],
   },
-  robots: {
-    index: true,
-    follow: true,
-    googleBot: {
-      index: true,
-      follow: true,
-      'max-video-preview': -1,
-      'max-image-preview': 'large',
-      'max-snippet': -1,
-    },
-  },
+  robots: { index: true, follow: true },
 };
 
 export default function RootLayout({
@@ -76,9 +65,12 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`${inter.variable} ${playfair.variable} font-sans`}>
+      <body className='font-sans overflow-x-hidden'>
         <StructuredData />
+
+        <SmoothScroller />
         {children}
+
       </body>
     </html>
   );

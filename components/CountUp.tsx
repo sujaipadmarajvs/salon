@@ -7,12 +7,13 @@ interface CountUpProps {
   duration?: number;
   suffix?: string;
   className?: string;
+  decimals?: number;
 }
 
-const CountUp = ({ end, duration = 2000, suffix = '', className = '' }: CountUpProps) => {
-  const [count, setCount] = useState(0);
+const CountUp = ({ end, duration = 2000, suffix = '', className = '', decimals = 0 }: CountUpProps) => {
+  const [count, setCount] = useState('0');
   const [hasAnimated, setHasAnimated] = useState(false);
-  const ref = useRef<HTMLDivElement>(null);
+  const ref = useRef<HTMLSpanElement>(null);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -27,11 +28,16 @@ const CountUp = ({ end, duration = 2000, suffix = '', className = '' }: CountUpP
       { threshold: 0.5 }
     );
 
-    if (ref.current) {
-      observer.observe(ref.current);
+    const currentRef = ref.current;
+    if (currentRef) {
+      observer.observe(currentRef);
     }
 
-    return () => observer.disconnect();
+    return () => {
+      if (currentRef) {
+        observer.unobserve(currentRef);
+      }
+    };
   }, [hasAnimated]);
 
   const animateCount = () => {
@@ -45,12 +51,14 @@ const CountUp = ({ end, duration = 2000, suffix = '', className = '' }: CountUpP
 
       // Easing function for smooth animation
       const easeOutQuart = 1 - Math.pow(1 - progress, 4);
-      const currentValue = Math.floor(startValue + (end - startValue) * easeOutQuart);
+      const currentValue = startValue + (end - startValue) * easeOutQuart;
 
-      setCount(currentValue);
+      setCount(currentValue.toFixed(decimals));
 
       if (progress < 1) {
         requestAnimationFrame(updateCount);
+      } else {
+        setCount(end.toFixed(decimals));
       }
     };
 

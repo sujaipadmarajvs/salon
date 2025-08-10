@@ -1,61 +1,42 @@
-"use client";
+'use client';
+import { useLayoutEffect, useRef } from 'react';
+import { gsap } from 'gsap';
+import { cn } from '@/lib/utils';
 
-import { useEffect, useRef } from "react";
-import { motion, stagger, useAnimate } from "framer-motion";
+export const TextGenerateEffect = ({
+  words,
+  className,
+}: {
+  words: string;
+  className?: string;
+}) => {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const wordsArray = words.split(' ');
 
-export const TextGenerateEffect = ({ words }: { words: string }) => {
-  const [scope, animate] = useAnimate();
-  const ref = useRef<HTMLDivElement>(null);
-  let wordsArray = words.split(" ");
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            animate(
-              "span",
-              {
-                opacity: 1,
-              },
-              {
-                duration: 2,
-                delay: stagger(0.1),
-              }
-            );
-          }
-        });
-      },
-      { threshold: 0.1 }
-    );
-
-    if (ref.current) {
-      observer.observe(ref.current);
-    }
-
-    return () => observer.disconnect();
-  }, [animate]);
-
-  const renderWords = () => {
-    return (
-      <motion.div ref={scope}>
-        {wordsArray.map((word, idx) => {
-          return (
-            <motion.span
-              key={word + idx}
-              className="text-white opacity-0"
-            >
-              {word}{" "}
-            </motion.span>
-          );
-        })}
-      </motion.div>
-    );
-  };
+  useLayoutEffect(() => {
+    if (!containerRef.current) return;
+    const ctx = gsap.context(() => {
+      const spans = containerRef.current!.querySelectorAll('span');
+      gsap.fromTo(
+        spans,
+        { opacity: 0 },
+        { opacity: 1, duration: 2, stagger: 0.2, ease: 'power1.out' }
+      );
+    }, containerRef);
+    return () => ctx.revert();
+  }, []);
 
   return (
-    <div ref={ref} className="text-base leading-relaxed tracking-wide">
-      {renderWords()}
+    <div className={cn('font-bold', className)}>
+      <div className="mt-4">
+        <div className="tracking-wide" ref={containerRef}>
+          {wordsArray.map((word, idx) => (
+            <span key={word + idx} className="opacity-0">
+              {word}{' '}
+            </span>
+          ))}
+        </div>
+      </div>
     </div>
   );
 };
