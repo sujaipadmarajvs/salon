@@ -8,8 +8,8 @@ import { siteConfig } from "@/config/site";
 
 const Footer = () => {
     return (
-        <footer className="bg-babu-primary text-white">
-            <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16">
+        <footer className="bg-babu-primary text-whit max-h-screen">
+            <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                 {/* Logo */}
                 <div className="flex w-full items-center justify-center">
                     <Image
@@ -24,20 +24,20 @@ const Footer = () => {
                 {/* Headline */}
                 <div className="text-center">
                     <h2 className="text-3xl sm:text-4xl lg:text-8xl font-[900] tracking-widest uppercase -translate-y-24 flex flex-col items-center justify-center">
-                        <span className="text-white">Step In Beautiful,</span>
+                        <span className="text-white">Step In Beautiful</span>
                         <span className="text-white">
-                            Step Out {" "}
-                            <RotatingWord
-                                words={["Radiant", "Refined"]}
-                                intervalMs={2200}
-                                className="text-white inline-block"
-                            />
+                            Step  Out {" "}
+                              <RotatingWord 
+                                 words={["Radiant", "Elegant"]}
+                                 intervalMs={2200}
+                                 className="text-white inline-block"
+                             />
                         </span>
                     </h2>
                 </div>
 
                 {/* Address + Email */}
-                <div className="mt-10 grid grid-cols-1 gap-6 text-center text-sm sm:grid-cols-2 sm:text-base">
+                <div className="grid grid-cols-1 gap-6 text-center text-sm sm:grid-cols-2 sm:text-base">
                     <div>
                         <p className="font-medium tracking-wide">
                             {siteConfig.siteName}
@@ -58,7 +58,7 @@ const Footer = () => {
                 </div>
 
                 {/* CTA */}
-                <div className="mt-10 flex items-center justify-center">
+                <div className="flex items-center justify-center">
                     <Link
                         href={siteConfig.contact.whatsapp}
                         className="rounded-md bg-babu-accent-2 px-6 py-2 text-sm font-semibold uppercase tracking-wide text-black transition hover:opacity-90 focus:outline-none focus-visible:ring-2 focus-visible:ring-babu-accent-2/60"
