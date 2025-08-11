@@ -3,7 +3,6 @@
 import { useEffect, useRef } from 'react';
 import Image from 'next/image';
 import { Award, Users, Clock, Star } from 'lucide-react';
-import SplitText from './SplitText';
 import CountUp from './CountUp';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -16,6 +15,7 @@ const About = () => {
   const image2Ref = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
   const statsRef = useRef<HTMLDivElement>(null);
+  const headingRef = useRef<HTMLHeadingElement>(null);
 
   // GSAP Animations for scroll-based triggers
   useEffect(() => {
@@ -24,8 +24,9 @@ const About = () => {
     const image2 = image2Ref.current;
     const content = contentRef.current;
     const stats = statsRef.current;
+    const heading = headingRef.current;
 
-    if (section && image1 && image2 && content && stats) {
+    if (section && image1 && image2 && content && stats && heading) {
       // Parallax for images on scroll
       gsap.to(image1, {
         yPercent: -15,
@@ -59,6 +60,12 @@ const About = () => {
       });
 
       timeline
+        .from(heading, {
+          y: 30,
+          opacity: 0,
+          duration: 0.8,
+          ease: 'power3.out',
+        })
         .from(stats.children, {
           y: 50,
           opacity: 0,
@@ -127,7 +134,6 @@ const About = () => {
   const stats = [
     { icon: Users, number: '5000+', label: 'Happy Clients' },
     { icon: Award, number: '15+', label: 'Years Experience' },
-    { icon: Clock, number: '24/7', label: 'Service Support' },
     { icon: Star, number: '4.8', label: 'Average Rating' },
   ];
 
@@ -169,14 +175,12 @@ const About = () => {
 
                   {/* Content Column */}
                   <div ref={contentRef}>
-                      <SplitText
-                          text="About BA-BU Family Saloon"
+                      <h2 
+                          ref={headingRef}
                           className="text-4xl lg:text-5xl font-black text-white mb-4 font-sans"
-                          splitType="words"
-                          textAlign="left"
-                          duration={0.8}
-                          delay={80}
-                      />
+                      >
+                          About BA-BU Family Saloon
+                      </h2>
                       <div className="w-24 h-1 bg-gold mb-6"></div>
 
                       <p className="text-lg text-gray-300 mb-6 leading-relaxed tracking-wider">
@@ -198,7 +202,7 @@ const About = () => {
                       {/* Stats Section */}
                       <div
                           ref={statsRef}
-                          className="grid grid-cols-2 md:grid-cols-4 gap-8 my-12"
+                          className="grid grid-cols-1 md:grid-cols-3 gap-8 my-12"
                       >
                           {stats.map((stat, index) => (
                               <div

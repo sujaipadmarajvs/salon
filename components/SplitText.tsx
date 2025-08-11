@@ -1,7 +1,6 @@
 import React, { useRef, useEffect } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import SplitType from "split-type";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -11,7 +10,6 @@ export interface SplitTextProps {
     delay?: number;
     duration?: number;
     ease?: string | ((t: number) => number);
-    splitType?: "chars" | "words" | "lines";
     from?: gsap.TweenVars;
     to?: gsap.TweenVars;
     threshold?: number;
@@ -23,58 +21,64 @@ export interface SplitTextProps {
 const SplitText: React.FC<SplitTextProps> = ({
     text,
     className = "",
-    delay = 80,
-    duration = 0.6,
+    delay = 100,
+    duration = 1.2,
     ease = "power3.out",
-    splitType = "chars",
     from = { opacity: 0, y: 20 },
     to = { opacity: 1, y: 0 },
     threshold = 0.1,
     rootMargin = "-50px",
-    textAlign = "center",
+    textAlign = "left",
     onAnimationComplete,
 }) => {
-    const ref = useRef<HTMLDivElement>(null);
+    const containerRef = useRef<HTMLDivElement>(null);
+    const textRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
-        if (!ref.current || !text) return;
+        if (!containerRef.current || !textRef.current || !text) return;
 
-        const el = ref.current;
-        const split = new SplitType(el, {
-            types: [splitType, 'words'],
-            tagName: 'span'
+        const container = containerRef.current;
+        const textEl = textRef.current;
+
+        // Create multiple copies of the text for staggered reveal
+        const words = text.split(' ');
+        const wordElements: HTMLSpanElement[] = [];
+
+        // Clear existing content
+        textEl.innerHTML = '';
+
+        // Create individual word elements
+        words.forEach((word, index) => {
+            const wordSpan = document.createElement('span');
+            wordSpan.textContent = word;
+            wordSpan.style.opacity = '0';
+            wordSpan.style.transform = 'translateY(20px)';
+            wordSpan.style.display = 'inline-block';
+            
+            textEl.appendChild(wordSpan);
+            wordElements.push(wordSpan);
+
+            // Add space after each word except the last
+            if (index < words.length - 1) {
+                const space = document.createTextNode(' ');
+                textEl.appendChild(space);
+            }
         });
 
-        let targets: HTMLElement[] = [];
-        if (splitType === 'chars' && split.chars) {
-            targets = split.chars;
-        } else if (splitType === 'words' && split.words) {
-            targets = split.words;
-        } else if (splitType === 'lines' && split.lines) {
-            targets = split.lines;
-        }
-
-        if (targets.length === 0) {
-            console.warn("No targets found for SplitText animation");
-            return;
-        }
-
-        gsap.set(targets, from);
-
         const st = ScrollTrigger.create({
-            trigger: el,
+            trigger: container,
             start: `top bottom-=${rootMargin}`,
             once: true,
             onEnter: () => {
-                gsap.to(targets, {
-                    ...to,
+                gsap.to(wordElements, {
+                    opacity: 1,
+                    y: 0,
                     duration,
                     ease,
                     stagger: delay / 1000,
                     onComplete: () => {
                         onAnimationComplete?.();
                         st.kill();
-                        split.revert();
                     },
                 });
             },
@@ -82,18 +86,12 @@ const SplitText: React.FC<SplitTextProps> = ({
 
         return () => {
             st.kill();
-            if (split) {
-                split.revert();
-            }
         };
     }, [
         text,
         delay,
         duration,
         ease,
-        splitType,
-        from,
-        to,
         threshold,
         rootMargin,
         onAnimationComplete,
@@ -101,11 +99,12 @@ const SplitText: React.FC<SplitTextProps> = ({
 
     return (
         <div
-            ref={ref}
+            ref={containerRef}
             className={className}
-            style={{ textAlign, whiteSpace: 'pre-wrap' }}
-            dangerouslySetInnerHTML={{ __html: text }}
-        />
+            style={{ textAlign }}
+        >
+            <div ref={textRef} />
+        </div>
     );
 };
 
