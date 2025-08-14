@@ -21,12 +21,31 @@ const Hero = () => {
 
   useEffect(() => {
     if (contentRef.current) {
-      const timeline = gsap.timeline({ defaults: { ease: 'power3.out' } });
+      // Set initial state
+      gsap.set(['.hero-title', '.hero-subtitle', '.hero-location', '.hero-cta'], {
+        opacity: 0,
+        y: 30
+      });
+
+      const timeline = gsap.timeline({
+        defaults: { ease: 'power3.out' },
+        delay: 0.5 // Small delay to ensure content is rendered
+      });
+
       timeline
-        .from('.hero-title', { opacity: 0, y: 30, duration: 1 })
-        .from('.hero-subtitle', { opacity: 0, y: 30, duration: 1 }, '-=0.7')
-        .from('.hero-location', { opacity: 0, y: 30, duration: 1 }, '-=0.7')
-        .from('.hero-cta', { opacity: 0, y: 30, duration: 1 }, '-=0.7');
+        .to('.hero-title', { opacity: 1, y: 0, duration: 1 })
+        .to('.hero-subtitle', { opacity: 1, y: 0, duration: 1 }, '-=0.7')
+        .to('.hero-location', { opacity: 1, y: 0, duration: 1 }, '-=0.7')
+        .to('.hero-cta', { opacity: 1, y: 0, duration: 1 }, '-=0.7');
+
+      return () => {
+        // Ensure content is visible when component unmounts
+        gsap.set(['.hero-title', '.hero-subtitle', '.hero-location', '.hero-cta'], {
+          opacity: 1,
+          y: 0
+        });
+        timeline.kill();
+      };
     }
   }, []);
 

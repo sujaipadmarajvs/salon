@@ -44,6 +44,17 @@ const GalleryPreview = () => {
     const button = textContentRef.current.querySelector("a");
     const imageElements = gsap.utils.toArray(imagesRef.current.children);
 
+    // Set initial state
+    gsap.set([heading, paragraph, button], {
+      yPercent: 100,
+      autoAlpha: 0
+    });
+    gsap.set(imageElements, {
+      yPercent: 50,
+      scale: 0.8,
+      autoAlpha: 0
+    });
+
     // Reveal animation
     const tl = gsap.timeline({
       scrollTrigger: {
@@ -57,15 +68,15 @@ const GalleryPreview = () => {
       },
     });
 
-    tl.from(heading, { yPercent: 100, autoAlpha: 0 })
-      .from(paragraph, { yPercent: 50, autoAlpha: 0 }, "-=0.7")
-      .from(button, { yPercent: 50, autoAlpha: 0 }, "-=0.7")
-      .from(
+    tl.to(heading, { yPercent: 0, autoAlpha: 1 })
+      .to(paragraph, { yPercent: 0, autoAlpha: 1 }, "-=0.7")
+      .to(button, { yPercent: 0, autoAlpha: 1 }, "-=0.7")
+      .to(
         imageElements,
         {
-          yPercent: 50,
-          scale: 0.8,
-          autoAlpha: 0,
+          yPercent: 0,
+          scale: 1,
+          autoAlpha: 1,
           stagger: 0.2,
         },
         "-=0.7"
@@ -86,6 +97,17 @@ const GalleryPreview = () => {
     });
 
     return () => {
+      // Ensure content is visible when component unmounts
+      gsap.set([heading, paragraph, button], {
+        yPercent: 0,
+        autoAlpha: 1
+      });
+      gsap.set(imageElements, {
+        yPercent: 0,
+        scale: 1,
+        autoAlpha: 1
+      });
+
       tl.kill();
       ScrollTrigger.getAll().forEach(st => st.kill());
     };
