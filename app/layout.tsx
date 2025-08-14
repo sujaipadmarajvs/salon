@@ -3,7 +3,9 @@ import type { Metadata } from 'next';
 import { siteConfig } from '@/config/site';
 import StructuredData from '@/components/StructuredData';
 import SmoothScroller from '@/components/SmoothScroller';
-
+import ScrollTriggerRefresh from '@/components/ScrollTriggerRefresh';
+import Header from '@/components/Header';
+import Footer from '@/components/Footer';
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://babusalon.com';
 
@@ -67,10 +69,12 @@ export default function RootLayout({
     <html lang="en">
       <body className='font-sans overflow-x-hidden'>
         <StructuredData />
-
+        <Header />
         <SmoothScroller />
-        {children}
-
+        <ScrollTriggerRefresh>
+          {children}
+        </ScrollTriggerRefresh>
+        <Footer />
       </body>
     </html>
   );

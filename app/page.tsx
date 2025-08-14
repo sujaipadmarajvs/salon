@@ -1,5 +1,3 @@
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
 import Hero from "@/components/Hero";
 import About from "@/components/About";
 import Services from "@/components/Services";
@@ -13,7 +11,6 @@ import BrandMarquee from "@/components/BrandMarquee";
 export default function Home() {
     return (
         <>
-            <Header />
             <main>
                 <Hero />
                 <About />
@@ -23,7 +20,6 @@ export default function Home() {
                 <Testimonials />
                 <Contact />
             </main>
-            <Footer />
             <WhatsAppChat />
             <ScrollToTop />
         </>

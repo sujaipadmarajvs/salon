@@ -65,9 +65,9 @@ Message: ${formData.message}`;
             Contact Us
           </h2>
           <div className="w-20 h-1 bg-gradient-to-r from-[#77530a] to-[#ffd277] mx-auto mb-6"></div>
-          <p className="text-lg text-white/80 max-w-2xl mx-auto tracking-wider">
+          {/* <p className="text-lg text-white/80 max-w-2xl mx-auto tracking-wider">
             Ready to transform your look? Get in touch with us to book your appointment or ask any questions.
-          </p>
+          </p> */}
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
@@ -141,7 +141,7 @@ Message: ${formData.message}`;
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Book salon appointment on WhatsApp in North Paravur"
-                className="flex items-center justify-center space-x-2 bg-gradient-to-r from-[#77530a] to-[#ffd277] hover:from-[#ffd277] hover:to-[#77530a] text-white px-6 py-3 rounded-full font-semibold transition-all duration-300 w-full hover:scale-105"
+                className="flex items-center justify-center space-x-2 bg-gradient-to-r from-[#77530a] to-[#ffd277] hover:from-[#ffd277] hover:to-[#77530a] text-white px-6 py-3 rounded-full transition-all duration-300 w-full hover:scale-105 tracking-wider"
               >
                 <MessageCircle className="w-5 h-5" />
                 <span>WhatsApp</span>
@@ -248,7 +248,7 @@ Message: ${formData.message}`;
 
                 <button
                   type="submit"
-                  className="w-full bg-gradient-to-r from-[#77530a] to-[#ffd277] hover:from-[#ffd277] hover:to-[#77530a] text-white px-8 py-4 rounded-lg font-semibold transition-all duration-300 flex items-center justify-center space-x-2 hover:scale-105"
+                  className="w-full bg-gradient-to-r from-[#77530a] to-[#ffd277] hover:from-[#ffd277] hover:to-[#77530a] text-white px-8 py-4 rounded-lg transition-all duration-300 flex items-center justify-center space-x-2 hover:scale-105 tracking-wider"
                 >
                   <Send className="w-5 h-5" />
                   <span>Send Message</span>
@@ -271,7 +271,7 @@ Message: ${formData.message}`;
                   className={`px-6 py-2 rounded-md transition-all duration-300 ${
                     activeLocation === 'mannam'
                       ? 'bg-gradient-to-r from-[#77530a] to-[#ffd277] text-white'
-                      : 'text-white/70 hover:text-white'
+                      : 'text-white/70 hover:text-white tracking-wider'
                   }`}
                 >
                   BA-BU FAMILY SALON Mannam
@@ -281,7 +281,7 @@ Message: ${formData.message}`;
                   className={`px-6 py-2 rounded-md transition-all duration-300 ${
                     activeLocation === 'north-paravur'
                       ? 'bg-gradient-to-r from-[#77530a] to-[#ffd277] text-white'
-                      : 'text-white/70 hover:text-white'
+                      : 'text-white/70 hover:text-white tracking-wider'
                   }`}
                 >
                   BA-BU FAMILY SALON North Paravur

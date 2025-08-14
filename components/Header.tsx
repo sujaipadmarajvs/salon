@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef, useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import { Home, User, Briefcase, Image as ImageIcon, Phone, MapPin, X } from "lucide-react";
@@ -13,45 +14,87 @@ gsap.registerPlugin(ScrollTrigger);
 const Header = () => {
     const headerRef = useRef<HTMLElement>(null);
     const [isScrolled, setIsScrolled] = useState(false);
-    const [hideOnScroll, setHideOnScroll] = useState(false);
-    const lastScrollYRef = useRef(0);
     const [showPromoBanner, setShowPromoBanner] = useState(true);
+    const pathname = usePathname();
 
     useEffect(() => {
+        // This effect is only for the promo banner visibility
         const handleScroll = () => {
-            const currentY = window.scrollY || 0;
-            setIsScrolled(currentY > 10);
-
-            const goingDown = currentY > lastScrollYRef.current;
-            const beyondThreshold = currentY > 80;
-            setHideOnScroll(goingDown && beyondThreshold);
-
-            lastScrollYRef.current = currentY;
+            setIsScrolled(window.scrollY > 10);
         };
-
         window.addEventListener("scroll", handleScroll, { passive: true });
-        return () => window.removeEventListener("scroll", handleScroll);
+
+        return () => {
+            window.removeEventListener("scroll", handleScroll);
+        };
     }, []);
 
+    // Separate effect for GSAP animations that depends on pathname
     useEffect(() => {
         const header = headerRef.current;
+        if (!header) return;
 
-        if (header) {
+        // Small delay to ensure DOM is ready after route change
+        const timer = setTimeout(() => {
+            // Kill existing ScrollTrigger instances for this header
+            ScrollTrigger.getAll().forEach(st => {
+                if (st.trigger === document.body || st.trigger === header) {
+                    st.kill();
+                }
+            });
+
+            // Refresh ScrollTrigger to recalculate positions
+            ScrollTrigger.refresh();
+
+            // Animate background color and blur when scrolling past the top
             gsap.to(header, {
                 backgroundColor: "rgba(0, 0, 0, 0.8)",
                 backdropFilter: "blur(4px)",
-                boxShadow:
-                    "0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)",
+                boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)",
                 duration: 0.3,
+                ease: "power2.inOut",
                 scrollTrigger: {
                     trigger: "body",
                     start: "top -10px",
                     end: "top -10px",
                     toggleActions: "play none none reverse",
+                    refreshPriority: -1, // Lower priority for this trigger
                 },
             });
-        }
-    }, []);
+
+            // Show/hide header based on scroll direction
+            const showAnim = gsap.from(header, {
+                yPercent: -110,
+                paused: true,
+                duration: 0.4,
+                ease: "power2.inOut"
+            }).progress(1);
+
+            ScrollTrigger.create({
+                start: "top top-=-80",
+                end: 99999,
+                refreshPriority: -1, // Lower priority for this trigger
+                onUpdate: (self) => {
+                    if (self.direction === -1) { // Scrolling up
+                        showAnim.play();
+                    } else { // Scrolling down
+                        if (self.scroll() > 80) {
+                            showAnim.reverse();
+                        }
+                    }
+                },
+            });
+        }, 100); // 100ms delay
+
+        return () => {
+            clearTimeout(timer);
+            ScrollTrigger.getAll().forEach(st => {
+                if (st.trigger === document.body || st.trigger === header) {
+                    st.kill();
+                }
+            });
+        };
+    }, [pathname]); // Re-run when pathname changes
 
     const menuItems = [
         { name: "Home", href: "/", icon: <Home className="w-5 h-5" /> },
@@ -63,7 +106,7 @@ const Header = () => {
         },
         {
             name: "Works",
-            href: "/gallery",
+            href: "/works",
             icon: <ImageIcon className="w-5 h-5" />,
         },
         {
@@ -112,7 +155,7 @@ const Header = () => {
             {/* Main Header */}
           <header
               ref={headerRef}
-              className={`fixed w-full z-40 bg-transparent transition-transform duration-300 ${hideOnScroll ? "-translate-y-full" : "translate-y-0"}`}
+              className="fixed w-full z-40 bg-transparent"
           >
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="flex items-center justify-between h-20">

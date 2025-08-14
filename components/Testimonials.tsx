@@ -222,11 +222,11 @@ const Testimonials = () => {
                         Loved by our clients
                     </h2>
                     <div className="w-20 h-1 bg-gradient-to-r from-amber-400 to-yellow-400 mx-auto mb-6"></div>
-                    <p className="text-lg text-gray-400 max-w-2xl mx-auto">
+                    {/* <p className="text-lg text-gray-400 max-w-2xl mx-auto">
                         Don't just take our word for it. Here's what our
                         satisfied clients have to say about their experience at
                         BA-BU Family Salon.
-                    </p>
+                    </p> */}
                 </div>
 
                 {/* Infinity Scrolling Testimonials */}
