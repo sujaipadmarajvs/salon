@@ -59,20 +59,45 @@ const About = () => {
         },
       });
 
+      // Set initial state
+      gsap.set(heading, {
+        y: 30,
+        opacity: 0,
+      });
+      gsap.set(stats.children, {
+        y: 50,
+        opacity: 0,
+      });
+
       timeline
-        .from(heading, {
-          y: 30,
-          opacity: 0,
+        .to(heading, {
+          y: 0,
+          opacity: 1,
           duration: 0.8,
           ease: 'power3.out',
         })
-        .from(stats.children, {
-          y: 50,
-          opacity: 0,
+        .to(stats.children, {
+          y: 0,
+          opacity: 1,
           duration: 0.8,
           stagger: 0.2,
           ease: 'power3.out',
         }, '-=0.5');
+
+      return () => {
+        // Ensure content is visible when component unmounts
+        gsap.set(heading, {
+          y: 0,
+          opacity: 1,
+        });
+        gsap.set(stats.children, {
+          y: 0,
+          opacity: 1,
+        });
+
+        timeline.kill();
+        ScrollTrigger.getAll().forEach(st => st.kill());
+      };
     }
   }, []);
 
@@ -175,7 +200,7 @@ const About = () => {
 
                   {/* Content Column */}
                   <div ref={contentRef}>
-                      <h2 
+                      <h2
                           ref={headingRef}
                           className="text-4xl lg:text-5xl font-black text-white mb-4 font-sans"
                       >

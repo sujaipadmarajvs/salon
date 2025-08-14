@@ -37,15 +37,17 @@ const Gallery = () => {
   const component = useRef<HTMLElement>(null);
   const modalRef = useRef<HTMLDivElement>(null);
 
+  // Simple GSAP animations
   useLayoutEffect(() => {
     const ctx = gsap.context(() => {
       const images = gsap.utils.toArray(".gallery-image-item");
-      images.forEach((image: any) => {
+      images.forEach((image: any, index: number) => {
         gsap.from(image, {
           opacity: 0,
           scale: 0.9,
           y: 50,
           duration: 0.8,
+          delay: index * 0.1,
           ease: 'power3.out',
           scrollTrigger: {
             trigger: image,
@@ -55,30 +57,38 @@ const Gallery = () => {
         });
       });
     }, component);
+
     return () => ctx.revert();
   }, []);
 
   const openModal = (image: string) => {
     setSelectedImage(image);
     setIsModalOpen(true);
-    gsap.fromTo(
-      modalRef.current,
-      { opacity: 0, scale: 0.9 },
-      { opacity: 1, scale: 1, duration: 0.3, ease: "power2.out" }
-    );
+    document.body.style.overflow = 'hidden';
+
+    if (modalRef.current) {
+      gsap.fromTo(
+        modalRef.current,
+        { opacity: 0, scale: 0.9 },
+        { opacity: 1, scale: 1, duration: 0.3, ease: "power2.out" }
+      );
+    }
   };
 
   const closeModal = () => {
-    gsap.to(modalRef.current, {
-      opacity: 0,
-      scale: 0.9,
-      duration: 0.3,
-      ease: "power2.in",
-      onComplete: () => {
-        setIsModalOpen(false);
-        setSelectedImage(null);
-      },
-    });
+    if (modalRef.current) {
+      gsap.to(modalRef.current, {
+        opacity: 0,
+        scale: 0.9,
+        duration: 0.3,
+        ease: "power2.in",
+        onComplete: () => {
+          setIsModalOpen(false);
+          setSelectedImage(null);
+          document.body.style.overflow = 'unset';
+        },
+      });
+    }
   };
 
   const handleHoverEnter = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -90,27 +100,17 @@ const Gallery = () => {
   };
 
   return (
-    <section id="gallery-section" ref={component} className="py-20 bg-black">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div id="gallery-header" className="text-center mb-16">
-          <h2 className="text-4xl lg:text-6xl font-sans font-extrabold text-white mb-4">
-            Our Gallery
-          </h2>
-          <div className="w-20 h-1 bg-gradient-to-r from-secondary to-yellow-300 mx-auto mb-6"></div>
-          <p className="text-lg text-white/80 max-w-2xl mx-auto tracking-wider">
-            A glimpse into our world of style, luxury, and transformation.
-          </p>
-        </div>
-
+    <section id="gallery-section" ref={component} className="py-20 bg-black w-full">
+      <div className="max-w-full px-4 sm:px-6 lg:px-8">
         <div
           id="gallery-grid"
-          className="grid grid-cols-2 md:grid-cols-4 auto-rows-[150px] gap-4"
+          className="grid grid-cols-2 md:grid-cols-6 auto-rows-[300px] gap-6 w-full"
         >
           {galleryImages.map((image, index) => (
             <div
               key={image}
               id={`gallery-item-${index}`}
-              className={`${gridSizes[index % gridSizes.length]} gallery-image-item relative rounded-lg overflow-hidden cursor-pointer group`}
+              className={`${gridSizes[index % gridSizes.length]} gallery-image-item relative overflow-hidden cursor-pointer group`}
               onMouseEnter={handleHoverEnter}
               onMouseLeave={handleHoverLeave}
               onClick={() => openModal(image)}
@@ -122,6 +122,7 @@ const Gallery = () => {
                 sizes="(max-width: 768px) 50vw, (max-width: 1200px) 25vw, 20vw"
                 className="object-cover"
                 priority={index < 4}
+                loading={index < 4 ? 'eager' : 'lazy'}
               />
               <div className="absolute inset-0 bg-black/20 group-hover:bg-black/0 transition-colors duration-300"></div>
             </div>
@@ -129,12 +130,14 @@ const Gallery = () => {
         </div>
       </div>
 
+      {/* Modal */}
       {isModalOpen && selectedImage && (
         <div
           id="gallery-modal"
           ref={modalRef}
           className="fixed inset-0 bg-black/90 z-50 flex items-center justify-center p-4"
           onClick={closeModal}
+          onKeyDown={(e) => e.key === 'Escape' && closeModal()}
         >
           <div
             className="relative"
@@ -146,11 +149,13 @@ const Gallery = () => {
               width={1200}
               height={800}
               className="max-w-[90vw] max-h-[90vh] object-contain rounded-lg"
+              priority
             />
             <button
               id="gallery-modal-close-button"
               onClick={closeModal}
               className="absolute -top-4 -right-4 bg-white/20 hover:bg-white/30 text-white p-2 rounded-full transition-colors"
+              aria-label="Close modal"
             >
               <X className="w-6 h-6" />
             </button>
