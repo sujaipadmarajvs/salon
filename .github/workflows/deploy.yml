@@ -1,0 +1,76 @@
+name: Deploy to cPanel via FTP
+
+on:
+  push:
+    branches:
+      - staging
+  pull_request:
+    types: [closed]
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  deploy-staging:
+    if: github.ref == 'refs/heads/staging'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build project
+        run: npm run build
+
+      - name: Upload build files to staging via FTP
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.4
+        with:
+          server: ${{ secrets.CPANEL_FTP_SERVER }}
+          username: ${{ secrets.CPANEL_FTP_USERNAME }}
+          password: ${{ secrets.CPANEL_FTP_PASSWORD }}
+          local-dir: ./out/
+          server-dir: /babu-stage.cloudtobuild.com/
+          protocol: ftps
+          dangerous-clean-slate: true
+          state-name: .ftp-deploy-sync-staging.json   # separate sync state for staging
+
+  deploy-production:
+    if: |
+      github.event_name == 'pull_request' && 
+      github.event.pull_request.merged == true && 
+      github.event.pull_request.base.ref == 'main' &&
+      github.event.pull_request.head.ref == 'staging'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build project
+        run: npm run build
+
+      - name: Upload build files to production via FTP
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.4
+        with:
+          server: ${{ secrets.CPANEL_FTP_SERVER }}
+          username: ${{ secrets.CPANEL_FTP_USERNAME }}
+          password: ${{ secrets.CPANEL_FTP_PASSWORD }}
+          local-dir: ./out/
+          server-dir: /babu.cloudtobuild.com/
+          protocol: ftps
+          dangerous-clean-slate: true
+          state-name: .ftp-deploy-sync-prod.json      # separate sync state for production
