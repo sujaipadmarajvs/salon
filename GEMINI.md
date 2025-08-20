@@ -16,7 +16,7 @@ The site focuses on:
 - **Framework:** Next.js (App Router, no server components)
 - **Language:** TypeScript
 - **Styling:** Tailwind CSS v3
-- **Animations:** GSAP (Framer Motion is partially used but should be replaced)
+- **Animations:** GSAP
 - **Component Libraries:** Can use `shadcn/ui` for responsive & accessible components
 - **Assets:** assets are present in the `/public/` directory
 - **Other:** Modular folder structure for scalable development
@@ -148,15 +148,15 @@ Each page should follow a **sectioned layout**, and each `<section>` must have a
 | --------------------- | ------------- | -------------------------------- |
 | Responsive layout     | ✅ In progress | Test mobile / tablet / desktop   |
 | Animations (GSAP)     | ✅ Mixed       | Some animations exist            |
-| Framer Motion Cleanup | ❌ Pending     | Replace with GSAP                |
+| Framer Motion Cleanup | ✅ Done       | No Framer Motion code found      |
 | Component Structure   | ✅ Good        | Continue modularizing components |
-| SEO Tags              | ❌ Missing     | Add meta & OpenGraph later       |
+| SEO Tags              | ✅ Good        | Base metadata is well-configured |
 
 ---
 
 ## 🔮 FUTURE PLANS
 
-* [ ] Replace all Framer Motion animations with GSAP
+* [x] Replace all Framer Motion animations with GSAP
 * [ ] Use dynamic imports if needed for animation-heavy components
 * [ ] Add `aria` labels and accessibility best practices
 * [ ] Create unified `<Container>` and `<Section>` layout components

@@ -43,6 +43,15 @@ const Header = () => {
                 }
             });
 
+            // Reset header visibility for specific pages
+            const shouldShowHeader = pathname === '/works' || pathname === '/' || pathname.startsWith('/works/');
+            if (shouldShowHeader) {
+                gsap.set(header, {
+                    yPercent: 0,
+                    opacity: 1,
+                });
+            }
+
             // Refresh ScrollTrigger to recalculate positions
             ScrollTrigger.refresh();
 

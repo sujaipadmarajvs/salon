@@ -30,7 +30,12 @@ const gridSizes = [
   'col-span-2 row-span-1',
 ];
 
-const Gallery = () => {
+interface GalleryProps {
+  showBackground?: boolean;
+  showPadding?: boolean;
+}
+
+const Gallery = ({ showBackground = true, showPadding = true }: GalleryProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
@@ -46,6 +51,7 @@ const Gallery = () => {
           opacity: 0,
           scale: 0.9,
           y: 50,
+          zIndex: 100,
           duration: 0.8,
           delay: index * 0.1,
           ease: 'power3.out',
@@ -100,11 +106,15 @@ const Gallery = () => {
   };
 
   return (
-    <section id="gallery-section" ref={component} className="py-20 bg-black w-full">
-      <div className="max-w-full px-4 sm:px-6 lg:px-8">
+    <section
+      id="gallery-section"
+      ref={component}
+      className={`${showBackground ? 'bg-black' : ''} ${showPadding ? 'py-20' : ''} w-full px-4`}
+    >
+      <div className={`${showPadding ? 'px-4 sm:px-6 lg:px-8' : ''}`}>
         <div
           id="gallery-grid"
-          className="grid grid-cols-2 md:grid-cols-6 auto-rows-[300px] gap-6 w-full"
+          className="grid grid-cols-2 md:grid-cols-6 auto-rows-[300px] gap-4 w-full"
         >
           {galleryImages.map((image, index) => (
             <div
