@@ -45,7 +45,7 @@ jobs:
           username: ${{ secrets.CPANEL_FTP_USERNAME }}
           password: ${{ secrets.CPANEL_FTP_PASSWORD }}
           local-dir: ./out/
-          server-dir: /home4/babubuild/stage.babu.cloudtobuild.com/
+          server-dir: stage.babu.cloudtobuild.com/
           protocol: ftps
           dangerous-clean-slate: true
           state-name: .ftp-deploy-sync-staging.json   # separate sync state for staging
@@ -92,7 +92,7 @@ jobs:
           username: ${{ secrets.CPANEL_FTP_USERNAME }}
           password: ${{ secrets.CPANEL_FTP_PASSWORD }}
           local-dir: ./out/
-          server-dir: /home4/babubuild/public_html/
+          server-dir: public_html/
           protocol: ftps
           dangerous-clean-slate: true
           state-name: .ftp-deploy-sync-prod.json      # separate sync state for production
