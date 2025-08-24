@@ -129,7 +129,7 @@ const ServicesContainer = ({ className }: ServicesContainerProps) => {
             width: '100vw',
             height: '100vh',
             zIndex: 10000,
-            duration: 1.2,
+            duration: .6,
             ease: 'power2.inOut',
             onComplete: () => {
                 // Fade in the overlay smoothly
@@ -156,22 +156,22 @@ const ServicesContainer = ({ className }: ServicesContainerProps) => {
             ease: 'power2.inOut'
         });
 
-        // Add a subtle scale effect to the clicked element
-        gsap.to(clickedElement, {
-            scale: 1.05,
-            duration: 0.6,
-            ease: 'power2.out',
-            yoyo: true,
-            repeat: 1
-        });
+        // Add a subtle scale effect to the clicked element during transition
+        // gsap.to(clickedElement, {
+        //     scale: 1.05,
+        //     duration: 0.8,
+        //     ease: 'power2.out',
+        //     yoyo: true,
+        //     repeat: 1
+        // });
     };
 
     return (
-        <div ref={containerRef} className={`w-full bg-primary ${className || ""}`}>
+        <div ref={containerRef} className={`w-screen bg-primary ${className || ""}`}>
             {/* Hero Section with Three Equal Service Sections */}
             <section
                 ref={heroRef}
-                className="relative w-full h-screen flex items-center justify-center overflow-hidden"
+                className="relative w-screen h-screen flex items-center justify-center overflow-hidden"
             >
                 {/* Services Grid - Three Equal Sections */}
                 <div className="services-grid flex w-full h-full">
@@ -193,15 +193,10 @@ const ServicesContainer = ({ className }: ServicesContainerProps) => {
                                 <div className="absolute inset-0 bg-black/50 group-hover:bg-black/30 transition-all duration-700" />
 
                                 {/* Content Overlay */}
-                                <div className="service-content relative z-10 h-full flex flex-col justify-center items-center text-center p-6">
-                                    <h3 className="service-title text-3xl font-gunteerz font-bold text-white mb-4 group-hover:text-accent1 transition-all duration-700 group-hover:text-4xl">
+                                <div className="service-content relative z-9 h-full flex flex-col justify-center items-center text-center p-6">
+                                    <h3 className="service-title text-3xl font-gunteerz font-extrabold text-white mb-4 transition-all duration-700 group-hover:text-5xl tracking-wide drop-shadow-lg">
                                         {section.title}
                                     </h3>
-
-                                    {/* CTA Button */}
-                                    <button className="service-button bg-gradient-to-r from-accent1 to-accent2 text-black font-bold py-4 px-8 rounded-full hover:from-accent2 hover:to-accent2 transition-all duration-300 transform hover:scale-105 opacity-0 group-hover:opacity-100">
-                                        View Details
-                                    </button>
                                 </div>
                             </div>
                         );
