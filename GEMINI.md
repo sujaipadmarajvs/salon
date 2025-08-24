@@ -59,10 +59,9 @@ extend: {
 │   └── services/page.tsx
 ├── components/            # Modular UI components
 ├── config/                # Centralized config (colors, constants, etc.)
-├── Fonts/                 # Font imports (currently unused) ← [TODO]
 ├── hooks/                 # Custom React hooks
 ├── lib/                   # Utility functions
-├── public/                # Static assets (logo, gallery images, etc.)
+├── public/                # Static assets (logo, fonts, gallery images, etc.)
 ├── tailwind.config.ts
 ├── postcss.config.js
 ├── next.config.js

@@ -188,7 +188,7 @@ const HairCareServicePage = () => {
             <h1 className="hero-title text-6xl lg:text-8xl font-gunteerz font-black uppercase tracking-wider mb-6">
               Hair Care Services
             </h1>
-            <h2 className="hero-subtitle text-2xl lg:text-3xl font-semibold text-secondary mb-4">
+            <h2 className="hero-subtitle text-2xl lg:text-3xl font-semibold bg-gradient-to-r from-[#77530a] via-[#ffd277] to-[#77530a] bg-clip-text text-transparent mb-4">
               Professional Hair Styling & Treatments
             </h2>
             <p className="hero-description text-lg lg:text-xl text-white/90 max-w-3xl mx-auto leading-relaxed">
@@ -198,7 +198,7 @@ const HairCareServicePage = () => {
         </section>
 
         {/* Services Section */}
-        <section className="py-20 bg-gradient-to-br from-primary via-primary/95 to-primary/90">
+        <section className="py-20 bg-gradient-to-br from-black via-gray-900 to-black">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16">
               <h2 className="text-4xl lg:text-6xl font-gunteerz font-black text-white mb-6">
@@ -215,10 +215,10 @@ const HairCareServicePage = () => {
                 return (
                   <div
                     key={service.id}
-                    className="service-card bg-white/10 backdrop-blur-sm rounded-2xl p-8 border border-white/20 hover:bg-white/20 transition-all duration-300"
+                    className="service-card bg-black/80 backdrop-blur-sm rounded-2xl p-8 border border-yellow-400/40 hover:bg-black/90 hover:border-yellow-400/60 transition-all duration-300"
                   >
                     <div className="flex items-start space-x-4">
-                      <div className="bg-accent1 text-black p-3 rounded-full">
+                      <div className="bg-gradient-to-r from-[#77530a] via-[#ffd277] to-[#77530a] text-black p-3 rounded-full">
                         <IconComponent className="w-6 h-6" />
                       </div>
                       <div className="flex-1">
@@ -228,7 +228,7 @@ const HairCareServicePage = () => {
                         <p className="text-gray-300 mb-4 leading-relaxed">
                           {service.description}
                         </p>
-                        <div className="flex items-center space-x-4 text-sm text-accent1 mb-4">
+                        <div className="flex items-center space-x-4 text-sm bg-gradient-to-r from-[#77530a] via-[#ffd277] to-[#77530a] bg-clip-text text-transparent mb-4">
                           <span className="flex items-center">
                             <Clock className="w-4 h-4 mr-1" />
                             {service.duration}
@@ -238,7 +238,7 @@ const HairCareServicePage = () => {
                         <ul className="space-y-2">
                           {service.features.map((feature, index) => (
                             <li key={index} className="flex items-center text-white/80">
-                              <Star className="w-4 h-4 text-accent1 mr-2" />
+                              <Star className="w-4 h-4 text-[#ffd277] mr-2" />
                               {feature}
                             </li>
                           ))}
@@ -256,7 +256,7 @@ const HairCareServicePage = () => {
         <section className="py-20 bg-white">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16">
-              <h2 className="text-4xl lg:text-6xl font-gunteerz font-black text-primary mb-6">
+              <h2 className="text-4xl lg:text-6xl font-gunteerz font-black text-black mb-6">
                 Special Hair Treatments
               </h2>
               <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
@@ -271,17 +271,17 @@ const HairCareServicePage = () => {
                   className="treatment-card bg-gradient-to-br from-gray-50 to-gray-100 rounded-2xl p-6 border border-gray-200 hover:shadow-lg transition-all duration-300"
                 >
                   <div className="text-center">
-                    <div className="bg-accent1 text-black w-16 h-16 rounded-full flex items-center justify-center mb-4 mx-auto">
+                    <div className="bg-gradient-to-r from-[#77530a] via-[#ffd277] to-[#77530a] text-black w-16 h-16 rounded-full flex items-center justify-center mb-4 mx-auto">
                       <Sparkles className="w-8 h-8" />
                     </div>
-                    <h3 className="text-xl font-gunteerz font-bold text-primary mb-2">
+                    <h3 className="text-xl font-gunteerz font-bold text-black mb-2">
                       {treatment.name}
                     </h3>
                     <p className="text-gray-600 text-sm mb-4">
                       {treatment.description}
                     </p>
                     <div className="text-center mb-4">
-                      <span className="text-2xl font-bold text-primary">{treatment.price}</span>
+                      <span className="text-2xl font-bold text-black">{treatment.price}</span>
                     </div>
                     <div className="flex items-center justify-center text-sm text-gray-500 mb-4">
                       <Clock className="w-4 h-4 mr-1" />
@@ -291,7 +291,7 @@ const HairCareServicePage = () => {
                       href={siteConfig.contact.whatsapp}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="bg-accent1 hover:bg-accent2 text-black px-6 py-2 rounded-full font-semibold transition-all duration-300 text-sm"
+                      className="bg-gradient-to-r from-[#77530a] via-[#ffd277] to-[#77530a] hover:from-[#8a5f0b] hover:via-[#ffd277] hover:to-[#8a5f0b] text-black px-6 py-2 rounded-full font-semibold transition-all duration-300 text-sm"
                     >
                       Book Now
                     </a>
@@ -306,17 +306,17 @@ const HairCareServicePage = () => {
         <section className="py-20 bg-gray-50">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16">
-              <h2 className="text-4xl lg:text-6xl font-gunteerz font-black text-primary mb-6">
+              <h2 className="text-4xl lg:text-6xl font-gunteerz font-black text-black mb-6">
                 Why Choose Our Hair Services?
               </h2>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               <div className="benefit-card text-center">
-                <div className="bg-accent1 text-black w-16 h-16 rounded-full flex items-center justify-center mb-4 mx-auto">
+                <div className="bg-gradient-to-r from-[#77530a] via-[#ffd277] to-[#77530a] text-black w-16 h-16 rounded-full flex items-center justify-center mb-4 mx-auto">
                   <Zap className="w-8 h-8" />
                 </div>
-                <h3 className="text-xl font-semibold text-primary mb-2">
+                <h3 className="text-xl font-semibold text-black mb-2">
                   Expert Stylists
                 </h3>
                 <p className="text-gray-600">
@@ -325,10 +325,10 @@ const HairCareServicePage = () => {
               </div>
 
               <div className="benefit-card text-center">
-                <div className="bg-accent1 text-black w-16 h-16 rounded-full flex items-center justify-center mb-4 mx-auto">
+                <div className="bg-gradient-to-r from-[#77530a] via-[#ffd277] to-[#77530a] text-black w-16 h-16 rounded-full flex items-center justify-center mb-4 mx-auto">
                   <Star className="w-8 h-8" />
                 </div>
-                <h3 className="text-xl font-semibold text-primary mb-2">
+                <h3 className="text-xl font-semibold text-black mb-2">
                   Premium Products
                 </h3>
                 <p className="text-gray-600">
@@ -337,10 +337,10 @@ const HairCareServicePage = () => {
               </div>
 
               <div className="benefit-card text-center">
-                <div className="bg-accent1 text-black w-16 h-16 rounded-full flex items-center justify-center mb-4 mx-auto">
+                <div className="bg-gradient-to-r from-[#77530a] via-[#ffd277] to-[#77530a] text-black w-16 h-16 rounded-full flex items-center justify-center mb-4 mx-auto">
                   <Sparkles className="w-8 h-8" />
                 </div>
-                <h3 className="text-xl font-semibold text-primary mb-2">
+                <h3 className="text-xl font-semibold text-black mb-2">
                   Customized Care
                 </h3>
                 <p className="text-gray-600">
@@ -352,7 +352,7 @@ const HairCareServicePage = () => {
         </section>
 
         {/* CTA Section */}
-        <section className="cta-section py-20 bg-primary text-white">
+        <section className="cta-section py-20 bg-black text-white">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <h2 className="text-4xl font-gunteerz font-bold mb-6">
               Ready to Transform Your Hair?
@@ -371,7 +371,7 @@ const HairCareServicePage = () => {
               </a>
               <a
                 href={`tel:${siteConfig.contact.phone}`}
-                className="bg-accent1 hover:bg-accent2 text-black px-8 py-4 rounded-full font-bold transition-all duration-300"
+                className="bg-gradient-to-r from-[#77530a] via-[#ffd277] to-[#77530a] hover:from-[#8a5f0b] hover:via-[#ffd277] hover:to-[#8a5f0b] text-black px-8 py-4 rounded-full font-bold transition-all duration-300"
               >
                 Call Now
               </a>

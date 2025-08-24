@@ -2,11 +2,16 @@
 
 import { useEffect, useRef } from "react";
 import { siteConfig } from "@/config/site";
-import { Crown, Scissors, UserCheck, Sparkles, Star, Clock, Users } from "lucide-react";
 import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import Image from "next/image";
+
+// Register ScrollTrigger plugin
+gsap.registerPlugin(ScrollTrigger);
 
 const WeddingsServicePage = () => {
   const pageRef = useRef<HTMLElement>(null);
+  const heroSectionRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
     const page = pageRef.current;
@@ -17,72 +22,281 @@ const WeddingsServicePage = () => {
       '.hero-title',
       '.hero-subtitle',
       '.hero-description',
-      '.service-card',
+      '.bridal-section',
+      '.groom-section',
       '.package-card',
       '.cta-section'
     ], {
       opacity: 0,
-      y: 30
+      y: 50,
+      scale: 0.95
     });
 
-    // Create timeline for smooth animations
-    const timeline = gsap.timeline({
-      defaults: { ease: 'power3.out' },
-      delay: 0.3 // Small delay to ensure smooth transition from previous page
+    // Hero section animations - immediate reveal on page load
+    const heroTimeline = gsap.timeline({
+      delay: 0.5
     });
 
-    // Hero section animations
-    timeline
-      .to('.hero-title', { opacity: 1, y: 0, duration: 1 })
-      .to('.hero-subtitle', { opacity: 1, y: 0, duration: 1 }, '-=0.7')
-      .to('.hero-description', { opacity: 1, y: 0, duration: 1 }, '-=0.7');
-
-    // Services section animations
-    timeline
-      .to('.service-card', {
+    heroTimeline
+      .to('.hero-title', {
         opacity: 1,
         y: 0,
-        duration: 0.8,
-        stagger: 0.2
-      }, '-=0.3');
+        scale: 1,
+        duration: 1.2,
+        ease: 'power3.out'
+      })
+      .to('.hero-subtitle', {
+        opacity: 1,
+        y: 0,
+        scale: 1,
+        duration: 1,
+        ease: 'power2.out'
+      }, '-=0.8')
+      .to('.hero-description', {
+        opacity: 1,
+        y: 0,
+        scale: 1,
+        duration: 1,
+        ease: 'power2.out'
+      }, '-=0.6');
 
-    // Packages section animations
-    timeline
+    // Add subtle floating animation to hero elements after initial reveal
+    heroTimeline.add(() => {
+      gsap.to('.hero-title', {
+        y: -8,
+        duration: 3,
+        ease: 'power2.inOut',
+        yoyo: true,
+        repeat: -1
+      });
+
+      gsap.to('.hero-subtitle', {
+        y: -4,
+        duration: 2.5,
+        ease: 'power2.inOut',
+        yoyo: true,
+        repeat: -1
+      });
+
+      gsap.to('.hero-description', {
+        y: -2,
+        duration: 4,
+        ease: 'power2.inOut',
+        yoyo: true,
+        repeat: -1
+      });
+    });
+
+    // Add a subtle entrance effect when hero section comes into view
+    ScrollTrigger.create({
+      trigger: '.hero-section',
+      start: 'top 90%',
+      onEnter: () => {
+        gsap.to('.hero-section', {
+          scale: 1.01,
+          duration: 0.8,
+          ease: 'power2.out'
+        });
+      },
+      onLeave: () => {
+        gsap.to('.hero-section', {
+          scale: 1,
+          duration: 0.8,
+          ease: 'power2.out'
+        });
+      }
+    });
+
+    // Add scroll-triggered text enhancement
+    ScrollTrigger.create({
+      trigger: '.hero-section',
+      start: 'top center',
+      end: 'bottom center',
+      onUpdate: (self) => {
+        const progress = self.progress;
+        gsap.set('.hero-title', {
+          opacity: 1 - (progress * 0.2),
+          scale: 1 - (progress * 0.05)
+        });
+        gsap.set('.hero-subtitle', {
+          opacity: 1 - (progress * 0.3),
+          scale: 1 - (progress * 0.03)
+        });
+        gsap.set('.hero-description', {
+          opacity: 1 - (progress * 0.4),
+          scale: 1 - (progress * 0.02)
+        });
+      }
+    });
+
+    // Background parallax effect for hero (same as home page)
+    const heroBg = document.querySelector('.hero-bg');
+    const heroSection = heroSectionRef.current;
+
+    if (heroBg && heroSection) {
+      gsap.to(heroBg, {
+        y: '30%',
+        ease: 'none',
+        scrollTrigger: {
+          trigger: heroSection,
+          start: 'top top',
+          end: 'bottom top',
+          scrub: true,
+        },
+      });
+    }
+
+    // Individual service section animations
+    const serviceSections = document.querySelectorAll('.service-section');
+    serviceSections.forEach((section, index) => {
+      gsap.fromTo(section,
+        {
+          opacity: 0,
+          y: index % 2 === 0 ? 50 : -50,
+          scale: 0.95
+        },
+        {
+          opacity: 1,
+          y: 0,
+          scale: 1,
+          duration: 1.2,
+          ease: 'power2.out',
+          scrollTrigger: {
+            trigger: section,
+            start: 'top 80%',
+            toggleActions: 'play none none reverse'
+          }
+        }
+      );
+
+      // Animate service features with stagger
+      const features = section.querySelectorAll('.feature-item');
+      if (features.length > 0) {
+        gsap.fromTo(features,
+          {
+            opacity: 0,
+            y: 20,
+            scale: 0.9
+          },
+          {
+            opacity: 1,
+            y: 0,
+            scale: 1,
+            duration: 0.6,
+            stagger: 0.1,
+            ease: 'power2.out',
+            scrollTrigger: {
+              trigger: section,
+              start: 'top 70%',
+              toggleActions: 'play none none reverse'
+            }
+          }
+        );
+      }
+    });
+
+    // Content sections scroll animations
+    const contentTimeline = gsap.timeline({
+      scrollTrigger: {
+        trigger: '.bridal-section',
+        start: 'top 80%',
+        toggleActions: 'play none none reverse'
+      }
+    });
+
+    contentTimeline
+      .to('.bridal-section', {
+        opacity: 1,
+        y: 0,
+        scale: 1,
+        duration: 1,
+        ease: 'power2.out'
+      })
+      .to('.groom-section', {
+        opacity: 1,
+        y: 0,
+        scale: 1,
+        duration: 1,
+        ease: 'power2.out'
+      }, '-=0.5')
+      .to('.packages-section', {
+        opacity: 1,
+        y: 0,
+        scale: 1,
+        duration: 1,
+        ease: 'power2.out'
+      }, '-=0.3')
       .to('.package-card', {
         opacity: 1,
         y: 0,
+        scale: 1,
         duration: 0.8,
-        stagger: 0.1
-      }, '-=0.2');
-
-    // CTA section animation
-    timeline
+        stagger: 0.15,
+        ease: 'power2.out'
+      }, '-=0.2')
       .to('.cta-section', {
         opacity: 1,
         y: 0,
-        duration: 1
-      }, '-=0.5');
+        scale: 1,
+        duration: 1,
+        ease: 'power2.out'
+      }, '-=0.1');
+
+    // Add hover animations for package cards
+    const packageCards = document.querySelectorAll('.package-card');
+    packageCards.forEach((card) => {
+      card.addEventListener('mouseenter', () => {
+        gsap.to(card, {
+          scale: 1.05,
+          duration: 0.3,
+          ease: 'power2.out'
+        });
+      });
+
+      card.addEventListener('mouseleave', () => {
+        gsap.to(card, {
+          scale: 1,
+          duration: 0.3,
+          ease: 'power2.out'
+        });
+      });
+    });
+
+    // Add pulse animation to CTA buttons
+    gsap.to('.cta-section a', {
+      scale: 1.02,
+      duration: 2,
+      ease: 'power2.inOut',
+      yoyo: true,
+      repeat: -1,
+      scrollTrigger: {
+        trigger: '.cta-section',
+        start: 'top 80%',
+        toggleActions: 'play none none reverse'
+      }
+    });
 
     return () => {
-      timeline.kill();
+      // Cleanup ScrollTrigger instances
+      ScrollTrigger.getAll().forEach(trigger => trigger.kill());
     };
   }, []);
 
-  const weddingServices = [
+  const bridalServices = [
     {
       id: 1,
       name: "Bridal Makeup",
       description: "Complete bridal makeover with professional makeup, hair styling, and accessories. Includes trial session and touch-ups.",
       price: "₹5,000 - ₹15,000",
       duration: "3-4 hours",
-      icon: Crown,
       features: [
         "Professional makeup application",
         "Hair styling and accessories",
         "Trial session included",
         "Touch-up services",
         "Bridal consultation"
-      ]
+      ],
+      bgImage: "/images/sofia-vila-flor-ebNYeZ8SR2o-unsplash.jpg"
     },
     {
       id: 2,
@@ -90,68 +304,102 @@ const WeddingsServicePage = () => {
       description: "Specialized bridal hair styling with modern techniques, extensions, and hair accessories.",
       price: "₹800 - ₹3,000",
       duration: "2-3 hours",
-      icon: Scissors,
       features: [
         "Modern hair styling techniques",
         "Hair extensions (if needed)",
         "Hair accessories included",
         "Hair treatment before styling",
         "Long-lasting hold products"
-      ]
+      ],
+      bgImage: "/images/baylee-gramling-a3xr2mVjT5M-unsplash.jpg"
     },
     {
       id: 3,
-      name: "Groom Grooming",
-      description: "Complete grooming package for the groom including haircut, beard styling, and facial treatments.",
-      price: "₹500 - ₹2,000",
-      duration: "1-2 hours",
-      icon: UserCheck,
-      features: [
-        "Professional haircut",
-        "Beard trimming and styling",
-        "Facial treatment",
-        "Hair wash and styling",
-        "Grooming consultation"
-      ]
-    },
-    {
-      id: 4,
       name: "Pre-wedding Care",
-      description: "Comprehensive pre-wedding beauty and wellness packages for both bride and groom.",
+      description: "Comprehensive pre-wedding beauty and wellness packages for the bride.",
       price: "₹2,000 - ₹8,000",
       duration: "Multiple sessions",
-      icon: Sparkles,
       features: [
         "Skin care treatments",
         "Hair care and treatments",
         "Body care and massage",
         "Wellness consultations",
         "Customized care plans"
-      ]
+      ],
+      bgImage: "/images/engin-akyurt-35NAaB_Nmx8-unsplash.jpg"
+    }
+  ];
+
+  const groomServices = [
+    {
+      id: 1,
+      name: "Groom Grooming",
+      description: "Complete grooming package for the groom including haircut, beard styling, and facial treatments.",
+      price: "₹500 - ₹2,000",
+      duration: "1-2 hours",
+      features: [
+        "Professional haircut",
+        "Beard trimming and styling",
+        "Facial treatment",
+        "Hair wash and styling",
+        "Grooming consultation"
+      ],
+      bgImage: "/images/john-arano-CCTCHXEsan8-unsplash.jpg"
+    },
+    {
+      id: 2,
+      name: "Pre-wedding Grooming",
+      description: "Specialized pre-wedding grooming and wellness packages for the groom.",
+      price: "₹1,500 - ₹5,000",
+      duration: "Multiple sessions",
+      features: [
+        "Skin care treatments",
+        "Hair care and styling",
+        "Beard care and maintenance",
+        "Wellness consultations",
+        "Customized grooming plans"
+      ],
+      bgImage: "/images/mitchell-orr-dcAw8Ms-teQ-unsplash.jpg"
+    },
+    {
+      id: 3,
+      name: "Wedding Day Grooming",
+      description: "Complete wedding day grooming package with touch-up services.",
+      price: "₹800 - ₹2,500",
+      duration: "2-3 hours",
+      features: [
+        "Haircut and styling",
+        "Beard grooming",
+        "Facial treatment",
+        "Touch-up services",
+        "Wedding day support"
+      ],
+      bgImage: "/images/wali-38sbVK-LI1Q-unsplash.jpg"
     }
   ];
 
   const packages = [
     {
-      name: "Basic Bridal Package",
-      price: "₹8,000",
+      name: "Bridal Package",
+      price: "₹12,000",
       includes: [
         "Bridal makeup",
         "Hair styling",
-        "Basic accessories",
-        "Trial session"
-      ]
-    },
-    {
-      name: "Premium Bridal Package",
-      price: "₹15,000",
-      includes: [
-        "Bridal makeup",
-        "Hair styling with extensions",
         "Premium accessories",
         "Trial session",
         "Touch-up services",
         "Pre-wedding care"
+      ]
+    },
+    {
+      name: "Groom Package",
+      price: "₹3,500",
+      includes: [
+        "Groom grooming",
+        "Hair styling",
+        "Beard care",
+        "Pre-wedding treatments",
+        "Wedding day support"
       ]
     },
     {
@@ -173,128 +421,326 @@ const WeddingsServicePage = () => {
     <>
       <div className="sr-only">
         <h1>BA-BU Family Salon - Wedding Services</h1>
-        <p>Complete bridal makeup, hair styling, and groom grooming services for your special day.</p>
+              <p>
+                  Complete bridal makeup, hair styling, and groom grooming
+                  services for your special day.
+              </p>
       </div>
 
-      <main ref={pageRef}>
+          <main ref={pageRef} className="w-full">
         {/* Hero Section */}
-        <section className="relative h-screen flex items-center justify-center overflow-hidden">
+        <section ref={heroSectionRef} className="hero-section relative h-screen w-full flex items-center justify-center overflow-hidden">
           <div
-            className="absolute inset-0 bg-cover bg-center"
-            style={{ backgroundImage: "url('/images/jonathan-borba-qJ2mhxmateo-unsplash.jpg')" }}
+            className="hero-bg absolute inset-0 bg-cover bg-center w-full h-full"
+            style={{
+              backgroundImage:
+                "url('/images/jonathan-borba-qJ2mhxmateo-unsplash.jpg')",
+            }}
           />
-          <div className="absolute inset-0 bg-black/60" />
+          <div className="absolute inset-0 bg-black/60 w-full" />
 
-          <div className="relative z-10 text-center text-white px-6">
+          <div className="relative z-10 text-center text-white px-6 w-full">
             <h1 className="hero-title text-6xl lg:text-8xl font-gunteerz font-black uppercase tracking-wider mb-6">
               Wedding Services
             </h1>
-            <h2 className="hero-subtitle text-2xl lg:text-3xl font-semibold text-secondary mb-4">
+            <h2 className="hero-subtitle text-2xl lg:text-3xl font-semibold bg-gradient-to-r from-[#77530a] via-[#ffd277] to-[#77530a] bg-clip-text text-transparent mb-4">
               Complete Bridal & Groom Packages
             </h2>
             <p className="hero-description text-lg lg:text-xl text-white/90 max-w-3xl mx-auto leading-relaxed">
-              Professional bridal makeup, hair styling, and groom grooming services for your special day.
+              Professional bridal makeup, hair styling, and groom
+              grooming services for your special day.
             </p>
           </div>
         </section>
 
-        {/* Services Section */}
-        <section className="py-20 bg-gradient-to-br from-primary via-primary/95 to-primary/90">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-16">
-              <h2 className="text-4xl lg:text-6xl font-gunteerz font-black text-white mb-6">
-                Our Wedding Services
-              </h2>
-              <p className="text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed">
-                Every detail matters on your special day. Our expert team ensures you look and feel your absolute best.
+              {/* Bridal Services Section Header */}
+              <section className="bridal-section py-24 w-full bg-black">
+                  <div className="w-full px-4 sm:px-6 lg:px-8 text-center">
+                      <h2 className="text-5xl lg:text-7xl font-gunteerz font-black text-white mb-8 leading-tight">
+                          Bridal Services
+                      </h2>
+                  </div>
+              </section>
+
+              {/* Individual Bridal Service Sections */}
+              {bridalServices.map((service, index) => (
+                  <section
+                      key={service.id}
+                      className={`service-section relative min-h-screen w-full flex items-center overflow-hidden tracking-widest ${
+                          index % 2 === 0 ? "flex-row" : "flex-row-reverse"
+                      }`}
+                  >
+                      <div className="w-1/2 relative h-screen">
+                          <div
+                              className="absolute inset-0 bg-cover bg-center w-full h-full"
+                              style={{
+                                  backgroundImage: `url('${service.bgImage}')`,
+                              }}
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-r from-black/40 to-black/20 w-full h-full" />
+                      </div>
+
+                      <div className="w-1/2 flex items-center px-12 justify-center py-16">
+                          <div className="max-w-full">
+                              <div className="mb-8">
+                                  <h3 className="text-5xl lg:text-6xl font-gunteerz font-black text-white mb-6 leading-tight">
+                                      {service.name}
+                                  </h3>
+                                  <p className="text-lg lg:text-xl text-white/90 leading-relaxed font-medium tracking-widest">
+                                      {service.description}
               </p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
-              {weddingServices.map((service) => {
-                const IconComponent = service.icon;
-                return (
-                  <div
-                    key={service.id}
-                    className="service-card bg-white/10 backdrop-blur-sm rounded-2xl p-8 border border-white/20 hover:bg-white/20 transition-all duration-300"
-                  >
-                    <div className="flex items-start space-x-4">
-                      <div className="bg-accent1 text-black p-3 rounded-full">
-                        <IconComponent className="w-6 h-6" />
+                              {/* Service Details Card */}
+                              <div className="bg-white/95 backdrop-blur-sm rounded-3xl p-8 mb-8 shadow-2xl border border-white/20">
+                                  <div className="grid grid-cols-2 gap-6 mb-6">
+                                      <div className="text-center p-4 bg-gradient-to-br from-[#77530a]/10 to-[#ffd277]/20 rounded-2xl">
+                                          <div className="text-2xl font-bold text-[#77530a] mb-2">
+                                              Duration
+                                          </div>
+                                          <div className="text-lg text-gray-700 font-medium">
+                                              {service.duration}
+                                          </div>
+                                      </div>
+                                      <div className="text-center p-4 bg-gradient-to-br from-[#77530a]/10 to-[#ffd277]/20 rounded-2xl">
+                                          <div className="text-2xl font-bold text-[#77530a] mb-2">
+                                              Price
+                                          </div>
+                                          <div className="text-lg text-gray-700 font-medium">
+                                              {service.price}
+                                          </div>
+                                      </div>
+                                  </div>
+                              </div>
+
+                              {/* Features Section */}
+                              <div className="bg-white/95 backdrop-blur-sm rounded-3xl p-8 mb-8 shadow-2xl border border-[#ffd277]/20">
+                                  <h4 className="text-2xl font-bold text-[#77530a] mb-6 text-center">
+                                      What's Included
+                                  </h4>
+                                  <div className="grid grid-cols-2 gap-4">
+                                      {service.features.map(
+                                          (feature, featureIndex) => (
+                                              <div
+                                                  key={featureIndex}
+                                                  className="relative p-4 bg-gradient-to-br from-white to-[#ffd277]/5 rounded-2xl border border-[#ffd277]/20 hover:from-[#ffd277]/10 hover:to-white hover:border-[#ffd277]/40 transition-all duration-300 group"
+                                              >
+                                                  <div className="absolute top-3 right-3 w-2 h-2 bg-gradient-to-r from-[#77530a] to-[#ffd277] rounded-full opacity-60 group-hover:opacity-100 transition-opacity"></div>
+                                                  <div className="flex items-start space-x-3">
+                                                      <div className="w-3 h-3 bg-gradient-to-r from-[#77530a] to-[#ffd277] rounded-full mt-1 flex-shrink-0 shadow-sm"></div>
+                                                      <span className="text-gray-800 font-medium text-sm leading-relaxed">
+                                                          {feature}
+                                                      </span>
+                                                  </div>
+                                              </div>
+                                          )
+                                      )}
+                                  </div>
+                              </div>
+
+                              {/* CTA Button */}
+                              <div className="text-center">
+                                  <a
+                                      href={siteConfig.contact.whatsapp}
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                      className="group inline-block bg-gradient-to-r from-[#77530a] via-[#ffd277] to-[#77530a] hover:from-[#8a5f0b] hover:via-[#ffd277] hover:to-[#8a5f0b] text-black px-12 py-5 rounded-full font-bold transition-all duration-500 text-xl shadow-2xl hover:shadow-[#ffd277]/25 hover:scale-110 transform"
+                                  >
+                                      <span className="flex items-center justify-center">
+                                          Book This Service
+                                          <svg
+                                              className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform duration-300"
+                                              fill="none"
+                                              stroke="currentColor"
+                                              viewBox="0 0 24 24"
+                                          >
+                                              <path
+                                                  strokeLinecap="round"
+                                                  strokeLinejoin="round"
+                                                  strokeWidth={2}
+                                                  d="M13 7l5 5m0 0l-5 5m5-5H6"
+                                              />
+                                          </svg>
+                                      </span>
+                                  </a>
+                              </div>
+                          </div>
                       </div>
-                      <div className="flex-1">
-                        <h3 className="text-2xl font-gunteerz font-bold text-white mb-2">
+                  </section>
+              ))}
+
+              {/* Groom Services Section Header */}
+              <section className="groom-section py-24 w-full bg-black">
+                  <div className="w-full px-4 sm:px-6 lg:px-8 text-center">
+                      <h2 className="text-5xl lg:text-7xl font-gunteerz font-black text-white mb-8 leading-tight">
+                          Groom Services
+                      </h2>
+                      {/* <p className="text-xl lg:text-2xl text-gray-600 max-w-4xl mx-auto leading-relaxed font-medium">
+                          Every groom deserves to look sharp and confident. Our
+                          grooming experts ensure you're wedding-ready with
+                          style and sophistication.
+                      </p> */}
+                  </div>
+              </section>
+
+              {/* Individual Groom Service Sections */}
+              {groomServices.map((service, index) => (
+                  <section
+                    key={service.id}
+                      className={`service-section relative min-h-screen w-full flex items-center overflow-hidden tracking-widest ${
+                          index % 2 === 0 ? "flex-row" : "flex-row-reverse"
+                      }`}
+                  >
+                      <div className="w-1/2 relative h-screen">
+                          <div
+                              className="absolute inset-0 bg-cover bg-center w-full h-full"
+                              style={{
+                                  backgroundImage: `url('${service.bgImage}')`,
+                              }}
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-r from-black/40 to-black/20 w-full h-full" />
+                      </div>
+
+                      <div className="w-1/2 flex items-center justify-center px-12 py-16">
+                          <div className="max-w-full">
+                              <div className="mb-8">
+                                  <h3 className="text-5xl lg:text-6xl font-gunteerz font-black text-white mb-6 leading-tight">
                           {service.name}
                         </h3>
-                        <p className="text-gray-300 mb-4 leading-relaxed">
+                                  <p className="text-lg lg:text-xl text-white/90 leading-relaxed font-medium tracking-widest">
                           {service.description}
                         </p>
-                        <div className="flex items-center space-x-4 text-sm text-accent1 mb-4">
-                          <span className="flex items-center">
-                            <Clock className="w-4 h-4 mr-1" />
+                              </div>
+
+                              {/* Service Details Card */}
+                              <div className="bg-white/95 backdrop-blur-sm rounded-3xl p-8 mb-8 shadow-2xl border border-white/20">
+                                  <div className="grid grid-cols-2 gap-6 mb-6">
+                                      <div className="text-center p-4 bg-gradient-to-br from-[#77530a]/10 to-[#ffd277]/20 rounded-2xl">
+                                          <div className="text-2xl font-bold text-[#77530a] mb-2">
+                                              Duration
+                                          </div>
+                                          <div className="text-lg text-gray-700 font-medium">
                             {service.duration}
-                          </span>
-                          <span className="font-bold">{service.price}</span>
-                        </div>
-                        <ul className="space-y-2">
-                          {service.features.map((feature, index) => (
-                            <li key={index} className="flex items-center text-white/80">
-                              <Star className="w-4 h-4 text-accent1 mr-2" />
-                              {feature}
-                            </li>
-                          ))}
-                        </ul>
+                                          </div>
+                                      </div>
+                                      <div className="text-center p-4 bg-gradient-to-br from-[#77530a]/10 to-[#ffd277]/20 rounded-2xl">
+                                          <div className="text-2xl font-bold text-[#77530a] mb-2">
+                                              Price
+                                          </div>
+                                          <div className="text-lg text-gray-700 font-medium">
+                                              {service.price}
+                                          </div>
+                                      </div>
+                                  </div>
+                              </div>
+
+                              {/* Features Section */}
+                              <div className="bg-white/95 backdrop-blur-sm rounded-3xl p-8 mb-8 shadow-2xl border border-[#ffd277]/20">
+                                  <h4 className="text-2xl font-bold text-[#77530a] mb-6 text-center">
+                                      What's Included
+                                  </h4>
+                                  <div className="grid grid-cols-2 gap-4">
+                                      {service.features.map(
+                                          (feature, featureIndex) => (
+                                              <div
+                                                  key={featureIndex}
+                                                  className="feature-item relative p-4 bg-gradient-to-br from-white to-[#ffd277]/5 rounded-2xl border border-[#ffd277]/20 hover:from-[#ffd277]/10 hover:to-white hover:border-[#ffd277]/40 transition-all duration-300 group"
+                                              >
+                                                  <div className="absolute top-3 right-3 w-2 h-2 bg-gradient-to-r from-[#77530a] to-[#ffd277] rounded-full opacity-60 group-hover:opacity-100 transition-opacity"></div>
+                                                  <div className="flex items-start space-x-3">
+                                                      <div className="w-3 h-3 bg-gradient-to-r from-[#77530a] to-[#ffd277] rounded-full mt-1 flex-shrink-0 shadow-sm"></div>
+                                                      <span className="text-gray-800 font-medium text-sm leading-relaxed">
+                                                          {feature}
+                                                      </span>
+                                                  </div>
+                                              </div>
+                                          )
+                                      )}
+                                  </div>
+                              </div>
+
+                              {/* CTA Button */}
+                              <div className="text-center">
+                                  <a
+                                      href={siteConfig.contact.whatsapp}
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                      className="group inline-block bg-gradient-to-r from-[#77530a] via-[#ffd277] to-[#77530a] hover:from-[#8a5f0b] hover:via-[#ffd277] hover:to-[#8a5f0b] text-black px-12 py-5 rounded-full font-bold transition-all duration-500 text-xl shadow-2xl hover:shadow-[#ffd277]/25 hover:scale-110 transform"
+                                  >
+                                      <span className="flex items-center justify-center">
+                                          Book This Service
+                                          <svg
+                                              className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform duration-300"
+                                              fill="none"
+                                              stroke="currentColor"
+                                              viewBox="0 0 24 24"
+                                          >
+                                              <path
+                                                  strokeLinecap="round"
+                                                  strokeLinejoin="round"
+                                                  strokeWidth={2}
+                                                  d="M13 7l5 5m0 0l-5 5m5-5H6"
+                                              />
+                                          </svg>
+                                      </span>
+                                  </a>
+                              </div>
+                          </div>
                       </div>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-        </section>
+                  </section>
+              ))}
 
         {/* Packages Section */}
-        <section className="py-20 bg-white">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-16">
-              <h2 className="text-4xl lg:text-6xl font-gunteerz font-black text-primary mb-6">
+        <section className="packages-section py-24 w-full bg-gradient-to-br from-black via-gray-900 to-black">
+          <div className="w-full px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-20">
+              <h2 className="text-5xl lg:text-7xl font-gunteerz font-black text-white mb-8 leading-tight">
                 Wedding Packages
               </h2>
-              <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
-                Choose the perfect package for your special day. All packages include consultation and trial sessions.
+              <p className="text-xl lg:text-2xl text-gray-300 max-w-4xl mx-auto leading-relaxed font-medium">
+                Choose the perfect package for your special day.
+                All packages include consultation and trial
+                sessions.
               </p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-8 w-full">
               {packages.map((pkg, index) => (
                 <div
                   key={index}
-                  className={`package-card bg-gradient-to-br rounded-2xl p-8 border-2 transition-all duration-300 hover:scale-105 ${
-                    index === 1
-                      ? 'from-accent1 to-accent2 border-accent1 shadow-2xl'
-                      : 'from-gray-50 to-gray-100 border-gray-200 shadow-lg'
-                  }`}
-                >
-                  {index === 1 && (
-                    <div className="text-center mb-4">
-                      <span className="bg-primary text-white px-4 py-2 rounded-full text-sm font-bold">
+                                  className={`package-card bg-gradient-to-br rounded-3xl p-10 border-2 transition-all duration-300 hover:scale-105 ${
+                                      index === 2
+                                          ? "from-[#77530a] via-[#ffd277] to-[#77530a] border-[#ffd277] shadow-2xl"
+                                          : "from-gray-50 to-gray-100 border-gray-200 shadow-lg"
+                                  }`}
+                              >
+                                  {index === 2 && (
+                                      <div className="text-center mb-6">
+                                          <span className="bg-black text-white px-6 py-3 rounded-full text-sm font-bold">
                         Most Popular
                       </span>
                     </div>
                   )}
 
-                  <h3 className="text-2xl font-gunteerz font-bold text-center mb-4">
+                                  <h3 className="text-3xl font-gunteerz font-bold text-center mb-6">
                     {pkg.name}
                   </h3>
-                  <div className="text-center mb-6">
-                    <span className="text-4xl font-bold text-primary">{pkg.price}</span>
+                                  <div className="text-center mb-8">
+                                      <span className="text-5xl font-bold text-black">
+                                          {pkg.price}
+                                      </span>
                   </div>
 
-                  <ul className="space-y-3 mb-8">
+                                  <ul className="space-y-4 mb-10">
                     {pkg.includes.map((item, itemIndex) => (
-                      <li key={itemIndex} className="flex items-center text-gray-700">
-                        <Star className="w-5 h-5 text-accent1 mr-3" />
+                                          <li
+                                              key={itemIndex}
+                                              className="flex items-center text-gray-700"
+                                          >
+                                              <span className="w-2 h-2 bg-gradient-to-r from-[#77530a] to-[#ffd277] rounded-full mr-4"></span>
+                                              <span className="font-medium">
                         {item}
+                                              </span>
                       </li>
                     ))}
                   </ul>
@@ -304,10 +750,10 @@ const WeddingsServicePage = () => {
                       href={siteConfig.contact.whatsapp}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className={`inline-block px-8 py-4 rounded-full font-bold transition-all duration-300 ${
-                        index === 1
-                          ? 'bg-primary text-white hover:bg-primary/90'
-                          : 'bg-accent1 text-black hover:bg-accent2'
+                                          className={`inline-block px-10 py-4 rounded-full font-bold transition-all duration-300 text-lg shadow-lg hover:shadow-xl transform hover:scale-105 ${
+                                              index === 2
+                                                  ? "bg-black text-white hover:bg-gray-800"
+                                                  : "bg-gradient-to-r from-[#77530a] via-[#ffd277] to-[#77530a] hover:from-[#8a5f0b] hover:via-[#ffd277] hover:to-[#8a5f0b] text-black"
                       }`}
                     >
                       Book Package
@@ -320,26 +766,27 @@ const WeddingsServicePage = () => {
         </section>
 
         {/* CTA Section */}
-        <section className="cta-section py-20 bg-primary text-white">
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <h2 className="text-4xl font-gunteerz font-bold mb-6">
+              <section className="cta-section py-24 w-full bg-black text-white">
+                  <div className="w-full px-4 sm:px-6 lg:px-8 text-center">
+                      <h2 className="text-5xl font-gunteerz font-bold mb-8 leading-tight">
               Ready for Your Perfect Wedding Look?
             </h2>
-            <p className="text-xl text-gray-300 mb-8">
-              Book your wedding services today and let us make your special day even more beautiful
+                      <p className="text-xl lg:text-2xl text-gray-300 mb-10 max-w-3xl mx-auto leading-relaxed font-medium">
+                          Book your wedding services today and let us make your
+                          special day even more beautiful
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                      <div className="flex flex-col sm:flex-row gap-6 justify-center">
               <a
                 href={siteConfig.contact.whatsapp}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="bg-green-500 hover:bg-green-600 text-white px-8 py-4 rounded-full font-bold transition-all duration-300"
+                              className="bg-green-500 hover:bg-green-600 text-white px-10 py-4 rounded-full font-bold transition-all duration-300 text-lg shadow-lg hover:shadow-xl transform hover:scale-105"
               >
                 WhatsApp Us
               </a>
               <a
                 href={`tel:${siteConfig.contact.phone}`}
-                className="bg-accent1 hover:bg-accent2 text-black px-8 py-4 rounded-full font-bold transition-all duration-300"
+                              className="bg-gradient-to-r from-[#77530a] via-[#ffd277] to-[#77530a] hover:from-[#8a5f0b] hover:via-[#ffd277] hover:to-[#8a5f0b] text-black px-10 py-4 rounded-full font-bold transition-all duration-300 text-lg shadow-lg hover:shadow-xl transform hover:scale-105"
               >
                 Call Now
               </a>
